@@ -1,0 +1,73 @@
+.overtime-request-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background: #dfe2e6;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 100vh;
+}
+
+.overtime-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #2563eb;
+    padding: 12px;
+    text-align: center;
+    border-radius: 8px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overtime-full-width {
+    width: 100%;
+}
+
+.ant-picker-input > input::placeholder {
+    text-transform: uppercase;
+}
+
+.overtime-submit-btn {
+    background-color: #2563eb;
+    border: none;
+    font-size: 14px;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.overtime-submit-btn:hover {
+    background-color: #1e40af;
+}
+
+.ant-form-item-label > label {
+    font-weight: bold;
+    color: #333;
+}
+
+.ant-select-arrow {
+    display: none !important;
+}
+.form-container{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.form-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #2563eb;
+    padding: 12px;
+    text-align: center;
+    border-radius: 8px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

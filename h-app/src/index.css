@@ -1,0 +1,193 @@
+
+body {
+    background-color: #f3f4f6; 
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 450px !important;
+    margin: 20px auto !important;
+    background: #dfe2e6;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-height: 100vh;
+  }
+  
+  .profile {
+    text-align: center;
+    background: #2563eb;
+    padding: 16px;
+  }
+  
+  .profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid white;
+  }
+  
+  .name {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 8px;
+  }
+  
+  .location {
+    color: white;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .calendar-week {
+    display: flex;
+    justify-content: center; /* Căn giữa các phần tử con */
+    gap: 5px;
+    padding-top: 10px;
+
+    width: 100%;
+    max-width: 450px;
+    margin: 0 auto; /* Căn giữa trong container */
+}
+
+  
+  .day {
+    text-align: center;
+    padding: 8px;
+    border-radius: 5px;
+    background: #dfe2e6;
+    color: #374151;
+    font-size: 14px;
+    min-width: 45px;
+    max-width: 50px;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  
+  .day-title {
+    font-weight: bold;
+  }
+  
+  .day.active {
+    background: #2563eb;
+    color: white;
+  }
+  
+  .quick-access {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    padding: 16px;
+    cursor: pointer;
+    justify-content: center;
+  }
+
+  .quick-item {
+    background: white;
+    text-align: center;
+    padding: 12px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .quick-item .icon {
+    font-size: 24px;
+    color: #2563eb;
+  }
+  
+  .quick-item .text {
+    font-size: 12px;
+    color: #374151;
+    margin-top: 4px;
+  }
+  
+  
+  .work-history {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .date {
+    font-size: 12px;
+    color: #374151;
+    margin-bottom: 4px;
+    padding-bottom: 20px;
+    margin-left: 15px;
+    margin-top: 7px;  
+  
+  }
+  
+  .history-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: #374151;
+    margin-left: 15px;
+  }
+  
+  
+  .footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+    background-color: white;
+  }
+  
+  .footer .icon {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .section-title {
+    margin-left: 15px;
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  .section-title-week {
+    margin-left: 5px;
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  .content {
+    background-color: white;
+    padding: 10px;
+  }
+  
+  .content-history {
+    background-color: white;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 100px;
+  }
+  
+
+@media (max-width: 480px) {
+  .calendar-week {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .day {
+    font-size: 12px;
+    padding: 6px;
+    min-width: 40px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 320px) {
+  .calendar-week {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .day {
+    font-size: 10px;
+    padding: 5px;
+    cursor: pointer;
+  }
+}
