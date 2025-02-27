@@ -128,12 +128,20 @@ body {
   
   
   .footer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
     display: flex;
     justify-content: space-around;
     padding: 16px;
     border-top: 1px solid #e5e7eb;
     background-color: white;
+    z-index: 1000;  
   }
+  
+  
   
   .footer .icon {
     font-size: 24px;
