@@ -71,6 +71,7 @@ body {
     max-width: 50px;
     box-sizing: border-box;
     cursor: pointer;
+    margin: 1px;
   }
   
   .day-title {
