@@ -87,7 +87,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
-    padding: 10px;
+    padding: 11px;
     cursor: pointer;
     justify-content: center;
   }
@@ -223,4 +223,3 @@ body {
     font-size: 12px;
   }
 }
-

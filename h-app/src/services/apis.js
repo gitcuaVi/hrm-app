@@ -91,7 +91,7 @@ const putRequestMultipartFormData = async (url, params, filePayload) => {
   try {
     const formData = new FormData();
 
-    // Only append the file if filePayload is defined and contains FileUpload
+    // Only append the file if filePayload is defined and contains FilepUload
     if (filePayload && filePayload.FileUpload) {
       formData.append("FileUpload", filePayload.FileUpload);
     }
