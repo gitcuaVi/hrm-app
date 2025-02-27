@@ -3,7 +3,7 @@ import { FaClipboardList  } from "react-icons/fa";
 import "../../../styles/bangluong.css"; 
 import "../../../styles/thongtin.css";
 import "../../../index.css";
-import profileImg from "/src/assets/profile.jpg";
+import profileImg from "../../../assets/profile.jpg";
 
 const EmployeeSalary = () => {
   const [selectedMonth, setSelectedMonth] = useState("02-2025");
