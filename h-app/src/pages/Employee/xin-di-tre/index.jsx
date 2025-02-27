@@ -20,7 +20,7 @@ const LateRequest = () => {
   };
 
   return (
-    <div className="late-request-container">
+    <div>
       <h2 className="form-title">Gửi yêu cầu xin đi trễ / về sớm của bạn</h2>
       <Card className="late-request-card">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>

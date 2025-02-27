@@ -22,7 +22,7 @@ const OvertimeRequest = () => {
   };
 
   return (
-    <div className="overtime-request-container">
+    <div>
     <h2 className="form-title">Đăng ký làm tăng ca</h2>
       <Card className="overtime-request-card">
         <div className="form-container">

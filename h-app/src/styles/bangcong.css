@@ -1,7 +1,7 @@
 
 .WorkCalendar-container {
   max-width: 100%;
-  width: 90%;
+  width: 100%;
   margin: 20px auto;
   background: #dfe2e6;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -13,7 +13,7 @@
 }
 
 .WorkCalendar-profile {
-  background-color: #3b82f6;
+  background-color: #2563eb;
   text-align: center;
   padding: 20px;
   border-radius: 5px;

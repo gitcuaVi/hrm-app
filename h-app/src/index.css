@@ -9,7 +9,6 @@ body {
     
   }
 
-
   .container {
     width: 100%;
     max-width: 450px !important;
@@ -18,7 +17,7 @@ body {
     border-radius: 10px !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    min-height: 110vh;  
+    min-height: 90vh;
   }
   
   .profile {

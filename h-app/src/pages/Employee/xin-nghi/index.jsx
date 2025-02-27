@@ -10,7 +10,7 @@ const LeaveRequest = () => {
   const [session, setSession] = useState("morning");
 
   return (
-    <div className="leave-container">
+    <div>
       <h2 className="form-title">Gửi yêu cầu xin nghỉ của bạn</h2>
       <div className="form-container">
       <Form layout="vertical">

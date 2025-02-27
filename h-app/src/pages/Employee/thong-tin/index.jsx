@@ -20,9 +20,9 @@ const EmployeeProfile = () => {
 
 
   return (
-    <div className="container">
+    <div>
       {}
-      <div className="profile-header">
+      <div className="profile">
         <img src={profileImg} alt="Profile" className="avatar" />
         <div className="name">{employee.name}</div>
         <div className="location">{employee.department}</div>
