@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Select, Typography, Calendar, Row, Col, Card, Spin, Badge } from "antd";
 import dayjs from "dayjs";
 import "../../../styles/bangcong.css"; 
+import profileImg from "../../assets/profile.jpg";
 
 const { Title, Text } = Typography;
 
@@ -61,7 +62,7 @@ const dateCellRender = (value) => {
   return (
     <div className="WorkCalendar-container">
       <div className="WorkCalendar-profile">
-        <img src="/src/assets/profile.jpg" alt="Profile" />
+        <img src={profileImg} alt="Profile" />
         <h2>Đinh Hoàng Lượm</h2>
         <p>BL-HCM</p>
       </div>

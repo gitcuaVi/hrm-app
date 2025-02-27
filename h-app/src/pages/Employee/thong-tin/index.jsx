@@ -6,6 +6,7 @@ import "../../../index.css";
 import { BiSolidContact } from "react-icons/bi";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { HiViewList } from "react-icons/hi";
+import profileImg from "../../assets/profile.jpg";
 
 const EmployeeProfile = () => {
   const employee = {
@@ -14,7 +15,7 @@ const EmployeeProfile = () => {
     department: "BL-HCM",
     phone: "",
     email: "hoangluom95@gmail.com",
-    avatar: "/src/assets/profile.png",
+    avatar: {profileImg},
     projects: ["BL-HCM"],
   };
 
