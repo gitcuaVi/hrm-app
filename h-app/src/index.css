@@ -1,20 +1,14 @@
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
     background-color: #f3f4f6; 
     font-family: 'Segoe UI', sans-serif;
-    overflow-x: hidden;
+    
   }
 
-  
-  body::after {
-    content: "";
-    display: block;
-    height: 200vh;
-  }
-  
 
   .container {
     width: 100%;
@@ -24,7 +18,7 @@ body {
     border-radius: 10px !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    min-height: 100vh;  
+    min-height: 110vh;  
   }
   
   .profile {
