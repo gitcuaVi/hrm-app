@@ -13,7 +13,6 @@ import dayjs from "dayjs";
 import profileImg from "../../assets/profile.jpg";
 
 
-
 const Profile = () => (
   <div className="profile">
     <img

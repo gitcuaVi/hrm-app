@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.0.8",
     "@twa-dev/sdk": "^8.0.2",
     "antd": "^5.24.2",
+    "axios": "^1.8.1",
     "esbuild": "^0.25.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

@@ -8,19 +8,20 @@ import EmployeeSalary from "./pages/Employee/bang-luong";
 import LeaveRequest from "./pages/Employee/xin-nghi";
 import LateRequest from "./pages/Employee/xin-di-tre";
 import OvertimeRequest from "./pages/Employee/tang-ca";
+import endPoint from "./routers/router";
 
 const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path={endPoint.ALL} element={<Layout />}>
           <Route index element={<Dashboard />} />
-          <Route path="profile" element={<EmployeeProfile />} />
-          <Route path="bang-cong" element={<Attendance />} />
-          <Route path="bang-luong" element={<EmployeeSalary />} />
-          <Route path="xin-nghi" element={<LeaveRequest />} />
-          <Route path="xin-di-tre" element={<LateRequest />} />
-          <Route path="tang-ca" element={<OvertimeRequest />} />
+          <Route path={endPoint.THONGTIN} element={<EmployeeProfile />} />
+          <Route path={endPoint.BANGCONG} element={<Attendance />} />
+          <Route path={endPoint.BANGLUONG} element={<EmployeeSalary />} />
+          <Route path={endPoint.XINNGHI} element={<LeaveRequest />} />
+          <Route path={endPoint.XINDITRE} element={<LateRequest />} />
+          <Route path={endPoint.TANGCA} element={<OvertimeRequest />} />
         </Route>
       </Routes>
     </Router>
