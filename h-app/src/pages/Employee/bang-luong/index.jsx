@@ -3,6 +3,7 @@ import { FaClipboardList  } from "react-icons/fa";
 import "../../../styles/bangluong.css"; 
 import "../../../styles/thongtin.css";
 import "../../../index.css";
+import profileImg from "../../assets/profile.jpg";
 
 const EmployeeSalary = () => {
   const [selectedMonth, setSelectedMonth] = useState("02-2025");
@@ -10,7 +11,6 @@ const EmployeeSalary = () => {
   const employee = {
     name: "Đinh Hoàng Lượm",
     department: "BL-HCM",
-    avatar: "/src/assets/profile.jpg",
     actualWorkdays: 24.5,
     paidLeave: 0,
     unpaidLeave: 0,
@@ -23,7 +23,7 @@ const EmployeeSalary = () => {
     <div className="container">
       {}
       <div className="profile-header">
-        <img src={employee.avatar} alt="Profile" className="avatar" />
+        <img src={profileImg} alt="Profile" className="avatar" />
         <div className="name">{employee.name}</div>
         <div className="location">{employee.department}</div>
       </div>
