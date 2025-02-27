@@ -5,13 +5,13 @@
   background: #dfe2e6;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  min-height: 120vh;
+  min-height: 110vh;
   }
   
   .late-request-card {
     background: white;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
   }
@@ -32,7 +32,7 @@
   background-color: #2563eb;
   padding: 12px;
   text-align: center;
-  border-radius: 8px;
+  border-radius: 5px;
   height: 30px;
   display: flex;
   align-items: center;

@@ -24,7 +24,7 @@
     padding: 8px;
     font-size: 16px;
     border: white;
-    border-radius: 8px;
+    border-radius: 5px;
     background-color: white;
     color: #333;
     outline: none;
@@ -46,7 +46,7 @@
   .details-card {
     background: white;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 5px;
     margin: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
@@ -82,7 +82,7 @@
     background:white;
     color: #27ae60;
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 5px;
     text-align: center;
     margin: 10px;
     font-size: 18px;

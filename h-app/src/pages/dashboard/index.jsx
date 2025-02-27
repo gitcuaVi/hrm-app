@@ -104,7 +104,7 @@ const WorkHistory = () => (
 const Dashboard = () => {
   return (
     <div className="container">
-      <div>
+      <div className="content-profile">
       <Profile />
       </div>
       <div className="content">

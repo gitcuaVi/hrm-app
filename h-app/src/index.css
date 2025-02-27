@@ -14,7 +14,7 @@ body {
     width: 100%;
     max-width: 450px !important;
     margin: 20px auto !important;
-    background: #dfe2e6;
+    background-color: #dfe2e6;
     border-radius: 10px !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -25,6 +25,8 @@ body {
     text-align: center;
     background: #2563eb;
     padding: 16px;
+    margin-bottom: 15px;
+    border-radius: 5px;
   }
   
   .profile-img {
@@ -171,13 +173,15 @@ body {
   .content {
     background-color: white;
     padding: 10px;
+    border-radius: 5px;
   }
-  
+
   .content-history {
     background-color: white;
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 100px;
+    border-radius: 5px;
   }
   
 
