@@ -5,6 +5,14 @@ body {
     font-family: 'Segoe UI', sans-serif;
   }
 
+  
+  body::after {
+    content: "";
+    display: block;
+    height: 200vh;
+  }
+  
+
   .container {
     width: 100%;
     max-width: 450px !important;
