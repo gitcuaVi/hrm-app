@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Select, Typography, Calendar, Row, Col, Card, Spin, Badge } from "antd";
 import dayjs from "dayjs";
 import "../../../styles/bangcong.css"; 
-import profileImg from "../../assets/profile.jpg";
 
 const { Title, Text } = Typography;
 

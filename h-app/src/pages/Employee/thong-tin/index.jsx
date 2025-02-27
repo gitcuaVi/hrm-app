@@ -6,7 +6,7 @@ import "../../../index.css";
 import { BiSolidContact } from "react-icons/bi";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { HiViewList } from "react-icons/hi";
-import profileImg from "../../assets/profile.jpg";
+
 
 const EmployeeProfile = () => {
   const employee = {
