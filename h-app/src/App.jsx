@@ -8,12 +8,10 @@ import EmployeeSalary from "./pages/Employee/bang-luong";
 import LeaveRequest from "./pages/Employee/xin-nghi";
 import LateRequest from "./pages/Employee/xin-di-tre";
 import OvertimeRequest from "./pages/Employee/tang-ca";
-import ScrollToTop from "./utils/scroll";
 
 const App = () => {
   return (
     <Router>
-      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
