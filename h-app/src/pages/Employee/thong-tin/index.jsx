@@ -22,11 +22,15 @@ const EmployeeProfile = () => {
   return (
     <div>
       {}
-      <div className="profile">
-        <img src={profileImg} alt="Profile" className="avatar" />
-        <div className="name">{employee.name}</div>
-        <div className="location">{employee.department}</div>
-      </div>
+  <div className="profile">
+    <img
+      src={profileImg}
+      alt="Profile"
+      className="profile-img"
+    />
+    <div className="name">Đinh Hoàng Lượm</div>
+    <div className="location">BL-HCM</div>
+  </div>
 
       {}
       <div className="profile-card">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, DatePicker, Select, Button } from "antd";
+import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import "../../../styles/xinnghi.css"; 
 import "dayjs/locale/vi";
 
@@ -12,7 +12,7 @@ const LeaveRequest = () => {
   return (
     <div>
       <h2 className="form-title">Gửi yêu cầu xin nghỉ của bạn</h2>
-      <div className="form-container">
+      <Card className="leave-request-card">
       <Form layout="vertical">
         <Form.Item label="Loại nghỉ">
           <Select value={leaveType} onChange={(value) => setLeaveType(value)}>
@@ -50,14 +50,17 @@ const LeaveRequest = () => {
         )}
 
         <Form.Item label="Lý do">
-          <Input.TextArea placeholder="Nhập lý do" rows={3} />
+          <Input.TextArea 
+          placeholder="Nhập lý do" 
+          rows={3} 
+          />
         </Form.Item>
 
-        <Button type="primary" block className="submit-btn">
+        <Button type="primary" block className="submit-btn" htmlType="submit">
           Gửi yêu cầu
         </Button>
       </Form>
-      </div>
+      </Card>
     </div>
   );
 };

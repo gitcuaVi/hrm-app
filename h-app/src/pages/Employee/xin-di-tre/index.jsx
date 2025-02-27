@@ -49,7 +49,9 @@ const LateRequest = () => {
             <Input.TextArea className="full-width" rows={3} placeholder="Nhập nội dung" />
           </Form.Item>
           
-          <Button type="primary" className="submit-btn" htmlType="submit">Gửi yêu cầu</Button>
+          <Button type="primary" className="submit-btn" htmlType="submit">
+            Gửi yêu cầu
+          </Button>
         </Form>
       </Card>
     </div>

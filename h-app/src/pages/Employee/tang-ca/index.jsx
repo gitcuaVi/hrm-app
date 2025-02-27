@@ -25,7 +25,6 @@ const OvertimeRequest = () => {
     <div>
     <h2 className="form-title">Đăng ký làm tăng ca</h2>
       <Card className="overtime-request-card">
-        <div className="form-container">
         <Form form={form} layout="vertical" onFinish={handleSubmit}>
           <Form.Item label="Ngày đăng ký" name="date"> 
             <DatePicker className="full-width" />
@@ -47,9 +46,10 @@ const OvertimeRequest = () => {
             </Select>
           </Form.Item>
           
-          <Button type="primary" className="submit-btn" htmlType="submit">Gửi yêu cầu</Button>
+          <Button type="primary" className="submit-btn" htmlType="submit">
+            Gửi yêu cầu
+          </Button>
         </Form>
-    </div>
       </Card>
     </div>
   );

@@ -60,12 +60,16 @@ const dateCellRender = (value) => {
   
 
   return (
-    <div className="WorkCalendar-container">
-      <div className="WorkCalendar-profile">
-        <img src={profileImg} alt="Profile" />
-        <h2>Đinh Hoàng Lượm</h2>
-        <p>BL-HCM</p>
-      </div>
+    <div>
+  <div className="profile">
+    <img
+      src={profileImg}
+      alt="Profile"
+      className="profile-img"
+    />
+    <div className="name">Đinh Hoàng Lượm</div>
+    <div className="location">BL-HCM</div>
+  </div>
 
     <Row justify="center" gutter={16} className="select-container">
       <Col className="select-group">

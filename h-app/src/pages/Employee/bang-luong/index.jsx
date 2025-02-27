@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaClipboardList  } from "react-icons/fa";
 import "../../../styles/bangluong.css"; 
-import "../../../styles/thongtin.css";
 import "../../../index.css";
 import profileImg from "../../../assets/profile.jpg";
 
@@ -20,15 +19,17 @@ const EmployeeSalary = () => {
 
 
   return (
-    <div className="container">
-      {}
-      <div className="profile">
-        <img src={profileImg} alt="Profile" className="avatar" />
-        <div className="name">{employee.name}</div>
-        <div className="location">{employee.department}</div>
-      </div>
+    <>
+  <div className="profile">
+    <img
+      src={profileImg}
+      alt="Profile"
+      className="profile-img"
+    />
+    <div className="name">Đinh Hoàng Lượm</div>
+    <div className="location">BL-HCM</div>
+  </div>
 
-      {}
       <div className="month-picker">
         <label htmlFor="month">Chọn tháng:</label>
         <select
@@ -41,7 +42,6 @@ const EmployeeSalary = () => {
         </select>
       </div>
 
-      {}
       <div className="details-card">
         <h3><FaClipboardList /> Chi tiết</h3>
         <div className="details-grid">
@@ -53,14 +53,13 @@ const EmployeeSalary = () => {
         <p className="actual-work">Công thực tế: <span className="greens">{employee.actualWorkdays}</span></p>
       </div>
 
-      {}
       <div className="salary-card">
         <p>
           <strong>Lương chuyển khoản:</strong> 
           <span className="salary-amount"> {employee.salary.toLocaleString()} VND</span>
         </p>
       </div>
-    </div>
+    </>
   );
 };
 
