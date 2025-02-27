@@ -3,10 +3,9 @@
 body {
     background-color: #f3f4f6; 
     font-family: 'Segoe UI', sans-serif;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scroll-behavior: smooth;
   }
+
+  
   body::after {
     content: "";
     display: block;
