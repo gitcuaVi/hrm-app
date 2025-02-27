@@ -11,10 +11,10 @@ body {
 
   .container {
     width: 100%;
-    max-width: 450px !important;
-    margin: auto !important;
+    max-width: 450px ;
+    margin: 0 auto ;
     background-color: #dfe2e6;
-    border-radius: 10px !important;
+    border-radius: 10px ;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     min-height: 90vh;
@@ -86,7 +86,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 10px;
-    padding: 16px;
+    padding: 10px;
     cursor: pointer;
     justify-content: center;
   }
@@ -94,7 +94,7 @@ body {
   .quick-item {
     background: white;
     text-align: center;
-    padding: 12px;
+    padding: 10px;
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
@@ -140,6 +140,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 420px;
+    height: 10px;
     display: flex;
     justify-content: space-around;
     padding: 16px;
@@ -147,7 +148,6 @@ body {
     background-color: white;
     z-index: 1000;  
   }
-  
   
   
   .footer .icon {
@@ -179,7 +179,7 @@ body {
     background-color: white;
     padding: 10px;
     margin-top: 5px;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
     border-radius: 5px;
   }
   

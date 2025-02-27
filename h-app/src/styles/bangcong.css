@@ -1,8 +1,8 @@
 .total-days {
   display: block;
-  margin: 16px;
   font-weight: bold;
   text-align: center;
+  margin-bottom: 5px;
 }
 
 .select-container {
@@ -11,12 +11,10 @@
   align-items: center;
   width: fit-content;
   margin: 0 auto; 
-  margin-bottom: 16px;
 }
 .select-group {
   display: flex;
   flex-direction: column;
-  margin-left:70px;
 }
 
 .select-group label {
@@ -29,7 +27,7 @@
 .select-group select {
   width: 100%; 
   max-width: 140px; 
-  padding: 6px 12px;
+  padding: 4px 8px;
   font-size: 14px;
   border: 1px solid #d1d5db; 
   border-radius: 6px;
@@ -51,6 +49,12 @@
   align-items: center;
   justify-content: center;
 }
+.ant-picker-cell-inner ant-picker-calendar-date{
+  font-size: 5px;
+}
+
+.ant-picker-body{}
+
 
 
 @media screen and (max-width: 768px) {
