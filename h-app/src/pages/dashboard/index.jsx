@@ -10,13 +10,14 @@ import { LuTimer } from "react-icons/lu";
 import "../../index.css";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import profileImg from "../../assets/profile.jpg";
 
 
 
 const Profile = () => (
   <div className="profile">
     <img
-      src="/src/assets/profile.jpg"
+      src={profileImg}
       alt="Profile"
       className="profile-img"
     />
