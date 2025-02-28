@@ -1,6 +1,5 @@
-const TELEGRAM_BOT_TOKEN = process.env.REACT_APP_TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.REACT_APP_TELEGRAM_CHAT_ID;
-
+const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID;
 
 const sendErrorToTelegram = async (errorMessage) => {
   const message = `🚨 *LỖI ỨNG DỤNG* 🚨\n\n❌ *Chi tiết:* ${errorMessage}\n\n🕒 *Thời gian:* ${new Date().toLocaleString()}`;
