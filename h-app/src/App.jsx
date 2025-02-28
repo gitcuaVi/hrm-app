@@ -14,7 +14,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const App = () => {
   return (
     <ErrorBoundary>
-          <Router>
+    <Router>
       <Routes>
         <Route path={endPoint.ALL} element={<Layout />}>
           <Route index element={<Dashboard />} />

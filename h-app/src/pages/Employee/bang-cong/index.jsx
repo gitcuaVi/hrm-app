@@ -6,6 +6,10 @@ import profileImg from "../../../assets/profile.jpg";
 
 const { Title, Text } = Typography;
 
+useEffect(() => {
+  throw new Error("Lỗi thử nghiệm!");
+}, []);
+
 const WorkCalendar = () => {
   const [year, setYear] = useState(2025);
   const [month, setMonth] = useState(2);

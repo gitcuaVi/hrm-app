@@ -1,5 +1,5 @@
 import React from "react";
-import sendErrorToTelegram from "../utils/sendErrorToTelegram";
+import sendErrorToTelegram from "../utils/sendErrorToTelegram"; // Import đúng
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -15,6 +15,13 @@ class ErrorBoundary extends React.Component {
     console.error("Lỗi ứng dụng:", error, errorInfo);
     sendErrorToTelegram(`🔥 Lỗi ứng dụng: ${error.toString()}\n📌 Chi tiết: ${errorInfo.componentStack}`);
   }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.hasError && !this.state.hasError) {
+      this.setState({ hasError: false });
+    }
+  }
+  
 
   render() {
     if (this.state.hasError) {
