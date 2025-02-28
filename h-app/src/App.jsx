@@ -9,10 +9,12 @@ import LeaveRequest from "./pages/Employee/xin-nghi";
 import LateRequest from "./pages/Employee/xin-di-tre";
 import OvertimeRequest from "./pages/Employee/tang-ca";
 import endPoint from "./routers/router";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   return (
-    <Router>
+    <ErrorBoundary>
+          <Router>
       <Routes>
         <Route path={endPoint.ALL} element={<Layout />}>
           <Route index element={<Dashboard />} />
@@ -25,6 +27,7 @@ const App = () => {
         </Route>
       </Routes>
     </Router>
+    </ErrorBoundary>
   );
 };
 

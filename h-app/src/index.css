@@ -10,6 +10,8 @@ body {
   }
 
   .container {
+    width: 100%;
+    max-width: 450px ;
     margin: 0 auto ;
     background-color: #dfe2e6;
     border-radius: 10px ;
@@ -51,6 +53,7 @@ body {
     justify-content: center;
     gap: 5px;
     padding-top: 10px;
+
     width: 100%;
     max-width: 450px;
     margin: 0 auto; 
@@ -135,19 +138,17 @@ body {
   .footer {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%; /* Luôn chiếm hết chiều ngang */
-    height: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 420px;
+    height: 14px;
     display: flex;
     justify-content: space-around;
     padding: 16px;
     border-top: 1px solid #e5e7eb;
     background-color: white;
-    z-index: 1000;
-    left: 50%;
-    transform: translateX(-50%); /* Giữ căn giữa nếu max-width nhỏ hơn 100% */
+    z-index: 1000;  
   }
-  
   
   
   .footer .icon {
