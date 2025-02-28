@@ -1,66 +1,31 @@
 import React, { useState } from "react";
-import { Button, Card, DatePicker, Form, Input, Select } from "antd";
-import "../../../styles/xinnghi.css"; 
-import "dayjs/locale/vi";
+import { Spin, Typography } from "antd";
+import LeaveRequestForm from "./components/LeaveRequestForm";
+import useLeaveRequest from "@/store/slice/leaveRequestSlice"; 
 
-const { Option } = Select;
+const { Text } = Typography;
 
 const LeaveRequest = () => {
-  const [leaveType, setLeaveType] = useState("half-day");
-  const [session, setSession] = useState("morning");
+  const { sendLeaveRequest, loading, error, successMessage } = useLeaveRequest();
+
+  const handleSubmit = (values) => {
+    const leaveData = {
+      ...values,
+      startDate: values.startDate.format("YYYY-MM-DD"),
+      endDate: values.endDate ? values.endDate.format("YYYY-MM-DD") : null,
+    };
+    sendLeaveRequest(leaveData);
+  };
 
   return (
     <div>
-      <h2 className="form-title">Gửi yêu cầu xin nghỉ của bạn</h2>
-      <Card className="leave-request-card">
-      <Form layout="vertical">
-        <Form.Item label="Loại nghỉ">
-          <Select value={leaveType} onChange={(value) => setLeaveType(value)}>
-            <Option value="half-day">Nghỉ nửa ngày</Option>
-            <Option value="full-day">Nghỉ một ngày</Option>
-            <Option value="multiple-days">Nghỉ nhiều ngày</Option>
-          </Select>
-        </Form.Item>
+      <h2 className="form-title">Gửi yêu cầu xin nghỉ</h2>
 
-        {leaveType === "half-day" && (
-          <Form.Item label="Chọn buổi">
-             <Select value={session} onChange={setSession}>
-              <Option value="morning">Buổi sáng</Option>
-              <Option value="afternoon">Buổi chiều</Option>
-            </Select>
-          </Form.Item>
-        )}
+      {loading && <Spin size="large" style={{ display: "block", margin: "10px auto" }} />}
+      {error && <Text type="danger">{error}</Text>}
+      {successMessage && <Text type="success">{successMessage}</Text>}
 
-        <Form.Item label="Ngày bắt đầu">
-          <DatePicker 
-          className="full-width" 
-          format="DD/MM/YYYY"  
-          placeholder="mm/dd/yyyy"
-          />
-        </Form.Item>
-
-        {leaveType === "multiple-days" && (
-          <Form.Item label="Ngày kết thúc">
-            <DatePicker 
-            className="full-width" 
-            format="DD/MM/YYYY" 
-            placeholder="mm/dd/yyyy"
-            />
-          </Form.Item>
-        )}
-
-        <Form.Item label="Lý do">
-          <Input.TextArea 
-          placeholder="Nhập lý do" 
-          rows={3} 
-          />
-        </Form.Item>
-
-        <Button type="primary" block className="submit-btn" htmlType="submit">
-          Gửi yêu cầu
-        </Button>
-      </Form>
-      </Card>
+      <LeaveRequestForm onSubmit={handleSubmit} loading={loading} />
     </div>
   );
 };
