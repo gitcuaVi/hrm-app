@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Input, Card } from "antd";
 import { WebApp } from "@twa-dev/sdk";
+import "antd/dist/reset.css";
 
 export default function TelegramAuth() {
   const [user, setUser] = useState(null);

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import "dayjs/locale/vi";
+import "antd/dist/reset.css";
 
 const { Option } = Select;
 

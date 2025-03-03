@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { Button, Card, DatePicker, Form, Input, Select, TimePicker } from "antd";
 import dayjs from "dayjs";
+import "antd/dist/reset.css";
 
 const { Option } = Select;
 
