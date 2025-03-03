@@ -17,6 +17,7 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+
   },
   build: {
     rollupOptions: {
@@ -33,8 +34,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['antd', '@ant-design/icons'],
     exclude: ['some-server-only-package'],
-  },
-  esbuild: {
-    jsxInject: `import React from 'react'`,
   },
 });
