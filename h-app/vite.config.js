@@ -3,22 +3,23 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Fix lỗi __dirname khi dùng ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.NODE_ENV === 'production' ? '/' : './',
+  base: "./", 
 
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      '@ant-design/icons/es': '@ant-design/icons/lib',
     },
   },
 
   server: {
-    hmr: process.env.NODE_ENV === 'production' ? false : true,
+    port: 3000,
+    host: true,
   },
 
   build: {
@@ -27,6 +28,7 @@ export default defineConfig({
 
     rollupOptions: {
       output: {
+
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('antd')) return 'antd';
@@ -41,11 +43,11 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       target: 'esnext',
-      jsx: "automatic", // 🔥 Fix lỗi JSX
       loader: {
         '.js': 'jsx',
         '.ts': 'tsx',
       },
     },
   },
+  
 });
