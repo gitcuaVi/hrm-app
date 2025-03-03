@@ -1,4 +1,4 @@
-import React from "react";
+
 import Profile from "./profile";
 import CalendarWeek from "./calendarWeek";
 import QuickAccess from "./quickAccess";

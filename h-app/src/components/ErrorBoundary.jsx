@@ -1,4 +1,4 @@
-import React from "react";
+
 import sendErrorToTelegram from "../utils/sendErrorToTelegram";
 
 class ErrorBoundary extends React.Component {

@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Layout from "./layouts/HomeLayout";
 import Dashboard from "./pages/dashboard";
 import EmployeeProfile from "./pages/Employee/thong-tin";
