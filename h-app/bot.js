@@ -1,8 +1,13 @@
 import TelegramBot from 'node-telegram-bot-api';
+import dotenv from 'dotenv';
 
-const TOKEN = '7557046857:AAH9lNaS0NR1Yrm_r57MhC3hxS9nHNbuEmg';
+dotenv.config(); 
+const TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+
+if (!TOKEN) {
+  throw new Error("⚠ Lỗi: Chưa có TELEGRAM_BOT_TOKEN trong .env");
+}
 const bot = new TelegramBot(TOKEN, { polling: true });
-
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, "Mở ứng dụng:", {
     reply_markup: {
