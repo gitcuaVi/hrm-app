@@ -34,4 +34,7 @@ export default defineConfig({
     include: ['antd', '@ant-design/icons'],
     exclude: ['some-server-only-package'],
   },
+  esbuild: {
+    jsxInject: `import React from 'react'`,
+  },
 });
