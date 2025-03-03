@@ -1,16 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath, URL } from 'url';
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  esbuild: {
-    jsxInject: `import React from 'react'`,
-  },
   base: "./",
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   server: {
