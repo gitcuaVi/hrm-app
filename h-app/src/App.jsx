@@ -14,16 +14,16 @@ import TelegramAuth from "./pages/login/index";
 import endPoint from "@/routers/router";
 
 const App = () => {
-  useEffect(() => {
-    if (typeof WebApp !== "undefined" && WebApp.initData) {
-      WebApp.ready(); 
-      WebApp.expand();
-      WebApp.requestViewport({ height: window.innerHeight });
-      console.log("WebApp đã sẵn sàng!");
-    } else {
-      console.warn("WebApp không hoạt động trong môi trường này.");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof WebApp !== "undefined" && WebApp.initData) {
+  //     WebApp.ready(); 
+  //     WebApp.expand();
+  //     WebApp.requestViewport({ height: window.innerHeight });
+  //     console.log("WebApp đã sẵn sàng!");
+  //   } else {
+  //     console.warn("WebApp không hoạt động trong môi trường này.");
+  //   }
+  // }, []);
 
 
 
