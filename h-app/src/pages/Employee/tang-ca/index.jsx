@@ -1,3 +1,6 @@
+"use client";
+
+
 import React from "react";
 import { Alert } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
