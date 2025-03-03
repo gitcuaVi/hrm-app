@@ -19,12 +19,12 @@ const OvertimeRequestForm = ({ onSubmit, loading }) => {
     <Card className="overtime-request-card">
       <Form form={form} layout="vertical" onFinish={onSubmit}>
         {/* Chọn ngày đăng ký */}
-        <Form.Item label="Ngày đăng ký" name="date" rules={[{ required: true, message: "Vui lòng chọn ngày!" }]}> 
+        <Form.Item label="Ngày đăng ký" name="date"> 
           <DatePicker className="full-width" format="DD/MM/YYYY" />
         </Form.Item>
         
         {/* Chọn ca làm */}
-        <Form.Item label="Ca làm" name="shift" rules={[{ required: true, message: "Vui lòng chọn ca làm!" }]}> 
+        <Form.Item label="Ca làm" name="shift"> 
           <Select className="full-width">
             <Option value="Ca sáng">Ca sáng</Option>
             <Option value="Ca trưa">Ca trưa</Option>
@@ -33,7 +33,7 @@ const OvertimeRequestForm = ({ onSubmit, loading }) => {
         </Form.Item>
         
         {/* Chọn số giờ tăng ca */}
-        <Form.Item label="Số giờ tăng ca" name="overtimeHours" rules={[{ required: true, message: "Vui lòng chọn số giờ tăng ca!" }]}> 
+        <Form.Item label="Số giờ tăng ca" name="overtimeHours" > 
           <Select className="full-width">
             <Option value="2 tiếng">2 tiếng</Option>
             <Option value="4 tiếng">4 tiếng</Option>

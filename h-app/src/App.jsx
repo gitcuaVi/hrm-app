@@ -1,5 +1,4 @@
-import React from "react";
-import { MemoryRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./layouts/HomeLayout";
 import Dashboard from "./pages/dashboard";
 import EmployeeProfile from "./pages/Employee/thong-tin";
@@ -14,19 +13,19 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const App = () => {
   return (
     <ErrorBoundary>
-    <Router>
-      <Routes>
-        <Route path={endPoint.ALL} element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path={endPoint.THONGTIN} element={<EmployeeProfile />} />
-          <Route path={endPoint.BANGCONG} element={<Attendance />} />
-          <Route path={endPoint.BANGLUONG} element={<EmployeeSalary />} />
-          <Route path={endPoint.XINNGHI} element={<LeaveRequest />} />
-          <Route path={endPoint.XINDITRE} element={<LateRequest />} />
-          <Route path={endPoint.TANGCA} element={<OvertimeRequest />} />
-        </Route>
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path={endPoint.ALL} element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path={endPoint.THONGTIN} element={<EmployeeProfile />} />
+            <Route path={endPoint.BANGCONG} element={<Attendance />} />
+            <Route path={endPoint.BANGLUONG} element={<EmployeeSalary />} />
+            <Route path={endPoint.XINNGHI} element={<LeaveRequest />} />
+            <Route path={endPoint.XINDITRE} element={<LateRequest />} />
+            <Route path={endPoint.TANGCA} element={<OvertimeRequest />} />
+          </Route>
+        </Routes>
+      </Router>
     </ErrorBoundary>
   );
 };

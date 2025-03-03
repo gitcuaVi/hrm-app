@@ -25,15 +25,15 @@ const LateRequestForm = ({ onSubmit, loading }) => {
           </Select>
         </Form.Item>
         
-        <Form.Item label="Ngày" name="date" rules={[{ required: true, message: "Vui lòng chọn ngày!" }]}> 
+        <Form.Item label="Ngày" name="date" > 
           <DatePicker className="full-width" format="DD/MM/YYYY" />
         </Form.Item>
 
-        <Form.Item label="Giờ" name="time" rules={[{ required: true, message: "Vui lòng chọn giờ!" }]}> 
+        <Form.Item label="Giờ" name="time"> 
           <TimePicker className="full-width" use12Hours format="h:mm A" />
         </Form.Item>
 
-        <Form.Item label="Lý do" name="reason" rules={[{ required: true, message: "Vui lòng nhập lý do!" }]}> 
+        <Form.Item label="Lý do" name="reason"> 
           <Input.TextArea className="full-width" rows={3} placeholder="Nhập nội dung" />
         </Form.Item>
         
