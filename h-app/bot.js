@@ -1,29 +1,21 @@
-const express = require("express");
-const cors = require("cors");
-const crypto = require("crypto");
-require("dotenv").config();
+import TelegramBot from 'node-telegram-bot-api';
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+const TOKEN = '7557046857:AAH9lNaS0NR1Yrm_r57MhC3hxS9nHNbuEmg';
+const bot = new TelegramBot(TOKEN, { polling: true });
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const SECRET_KEY = crypto.createHmac("sha256", TELEGRAM_BOT_TOKEN).digest();
-
-app.get("/auth", (req, res) => {
-    const { hash, ...data } = req.query;
-    const checkString = Object.keys(data)
-        .sort()
-        .map((key) => `${key}=${data[key]}`)
-        .join("\n");
-
-    const hmac = crypto.createHmac("sha256", SECRET_KEY).update(checkString).digest("hex");
-
-    if (hmac !== hash) {
-        return res.status(403).json({ message: "Unauthorized" });
+bot.onText(/\/start/, (msg) => {
+  bot.sendMessage(msg.chat.id, "Mở ứng dụng:", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Mở Web App",
+            web_app: { url: "https://hrm-app-fawn.vercel.app/" }
+          }
+        ]
+      ]
     }
-
-    res.json({ message: "Authorized", user: data });
+  });
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+console.log("Bot đang chạy...");

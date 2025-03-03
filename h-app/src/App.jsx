@@ -9,8 +9,14 @@ import LateRequest from "./pages/Employee/xin-di-tre";
 import OvertimeRequest from "./pages/Employee/tang-ca";
 import endPoint from "./routers/router";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { WebApp } from "@twa-dev/sdk";
 
 const App = () => {
+
+  useEffect(() => {
+    WebApp.expand();
+  }, []);
+
   return (
     <ErrorBoundary>
       <Router>
