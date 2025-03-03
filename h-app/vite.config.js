@@ -1,20 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
-import path from 'path';
+import { fileURLToPath, URL } from 'url';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(), 
-  ],
+  plugins: [react()],
   esbuild: {
-    jsxInject: `import React from 'react'`
+    jsxInject: `import React from 'react'`,
   },
   base: "./",
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   server: {
@@ -22,20 +18,21 @@ export default defineConfig({
     host: true,
   },
   build: {
+    target: 'esnext',
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules/antd')) {
-            return 'antd'; // Create a separate chunk for antd
+          if (id.includes('node_modules')) {
+            if (id.includes('antd')) return 'antd';
+            if (id.includes('react')) return 'react-vendor';
+            return 'vendor';
           }
         },
       },
     },
-    chunkSizeWarningLimit: 1000, // Increase chunk size limit
+    chunkSizeWarningLimit: 1000,
   },
   optimizeDeps: {
     include: ['antd', '@ant-design/icons'],
-    exclude: ['some-server-only-package'],
   },
-
 });
