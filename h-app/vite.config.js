@@ -9,17 +9,17 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
-  base: "./", 
+  base: process.env.NODE_ENV === 'production' ? '/' : './',
 
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@ant-design/icons/es': '@ant-design/icons/lib',
     },
   },
 
   server: {
-    port: 3000,
-    host: true,
+    hmr: process.env.NODE_ENV === 'production' ? false : true,
   },
 
   build: {
@@ -28,7 +28,6 @@ export default defineConfig({
 
     rollupOptions: {
       output: {
-
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('antd')) return 'antd';
@@ -40,10 +39,14 @@ export default defineConfig({
     },
   },
 
-  optimizeDeps: {  
-    esbuildOptions: {  
-      target: 'esnext',  
-    },  
-  },  
-  
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+      jsx: "automatic",  // 🛠️ Fix lỗi JSX
+      loader: {
+        '.js': 'jsx',
+        '.ts': 'tsx',
+      },
+    },
+  },
 });
