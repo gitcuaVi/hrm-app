@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 
 import React, { useState } from "react";
 import { Button, Card, DatePicker, Form, Input, Select } from "antd";
