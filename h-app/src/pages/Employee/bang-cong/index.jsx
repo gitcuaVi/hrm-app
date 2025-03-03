@@ -84,7 +84,7 @@ const WorkCalendar = () => {
           </Text>
           <Calendar
             fullscreen={false}
-            dateCellRender={dateCellRender}
+            cellRender={dateCellRender}
             headerRender={() => null}
             onPanelChange={(date) => {
               setYear(date.year());

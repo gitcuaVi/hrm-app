@@ -9,18 +9,19 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [react()],
-  base: "./", 
+  base: '/',
 
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      '@ant-design/icons/es': '@ant-design/icons/lib',
     },
   },
 
   server: {
-    port: 3000,
-    host: true,
+    hmr: true,
   },
+  
 
   build: {
     target: 'esnext',
@@ -43,6 +44,11 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       target: 'esnext',
+      loader: {
+        '.js': 'jsx',
+        '.ts': 'tsx',
+      },
     },
   },
+  
 });
