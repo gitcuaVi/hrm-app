@@ -9,7 +9,7 @@ import { LuTimer } from "react-icons/lu";
 const QuickAccess = () => {
   const navigate = useNavigate();
   const items = [
-    { icon: <FaRegUserCircle />, text: "Thông tin", path: "/profile" },
+    { icon: <FaRegUserCircle />, text: "Thông tin", path: "/thong-tin" },
     { icon: <FaCalendarAlt />, text: "Bảng công", path: "/bang-cong" },
     { icon: <FaMoneyCheckAlt />, text: "Bảng lương", path: "/bang-luong" },
     { icon: <FaCalendarDay />, text: "Xin nghỉ", path: "/xin-nghi" },

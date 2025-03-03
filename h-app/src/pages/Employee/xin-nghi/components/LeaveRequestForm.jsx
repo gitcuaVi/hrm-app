@@ -1,14 +1,9 @@
-"use client";
+
 
 import React, { useState } from "react";
+import { Button, Card, DatePicker, Form, Input, Select } from "antd";
 import "dayjs/locale/vi";
-import {Form} from "@/components/ui/form"
-import {Select} from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
-
+import "antd/dist/reset.css";
 
 const { Option } = Select;
 
@@ -38,12 +33,12 @@ const LeaveRequestForm = ({ onSubmit, loading }) => {
         )}
 
         <Form.Item label="Ngày bắt đầu" name="startDate" placeholder="DD/MM/YYYY">
-          <Calendar className="full-width" format="DD/MM/YYYY" />
+          <DatePicker className="full-width" format="DD/MM/YYYY" />
         </Form.Item>
 
         {leaveType === "multiple-days" && (
           <Form.Item label="Ngày kết thúc" name="endDate">
-            <Calendar className="full-width" format="DD/MM/YYYY" />
+            <DatePicker className="full-width" format="DD/MM/YYYY" />
           </Form.Item>
         )}
 

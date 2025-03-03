@@ -1,6 +1,3 @@
-"use client";
-
-
 import React from "react";
 import { FaUserCircle  } from "react-icons/fa";
 import { FaBoxArchive } from "react-icons/fa6";

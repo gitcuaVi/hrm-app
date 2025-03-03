@@ -1,6 +1,6 @@
 const endPoint = {
   ALL: "/",
-  THONGTIN: "/profile",
+  THONGTIN: "/thong-tin",
   BANGCONG: "/bang-cong",
   BANGLUONG: "/bang-luong",
   XINNGHI: "/xin-nghi",

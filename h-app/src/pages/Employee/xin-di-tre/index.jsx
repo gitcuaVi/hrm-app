@@ -1,11 +1,12 @@
-"use client";
 
-import React from "react";
-import { Alert } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import React, { useState } from "react";
+import { Spin, Typography } from "antd";
 import LateRequestForm from "./components/LateRequestForm"; 
 import useLateRequest from "@/store/slice/lateRequestSlice"; 
 import "@/styles/xinditre.css";
+
+const { Text } = Typography;
 
 const LateRequest = () => {
   const { sendLateRequest, loading, error, successMessage } = useLateRequest();
@@ -20,15 +21,13 @@ const LateRequest = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Gửi yêu cầu xin đi trễ / về sớm</h2>
+    <div>
+      <h2 className="form-title">Gửi yêu cầu xin đi trễ / về sớm</h2>
 
-      {/* Hiển thị thông báo */}
-      {loading && <Skeleton className="h-8 w-full mb-4" />}
-      {error && <Alert variant="destructive" className="mb-4">{error}</Alert>}
-      {successMessage && <Alert variant="success" className="mb-4">{successMessage}</Alert>}
+      {loading && <Spin size="large" style={{ display: "block", margin: "10px auto" }} />}
+      {error && <Text type="danger">{error}</Text>}
+      {successMessage && <Text type="success">{successMessage}</Text>}
 
-      {/* Form đăng ký đi trễ/về sớm */}
       <LateRequestForm onSubmit={handleSubmit} loading={loading} />
     </div>
   );

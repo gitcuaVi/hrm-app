@@ -4,10 +4,16 @@ const WorkHistory = () => {
   const [workHistory, setWorkHistory] = useState([]);
 
   useEffect(() => {
-    fetch("")
-      .then((res) => res.json())
-      .then((data) => setWorkHistory(data))
-      .catch((error) => console.error("Lỗi khi lấy lịch sử công:", error));
+    // Giả lập dữ liệu API trả về
+    const fakeData = [
+      { time: "2025-03-01 08:00", status: "Check-in" },
+      { time: "2025-03-01 17:00", status: "Check-out" },
+    ];
+
+    // Giả lập độ trễ API (giống như đang fetch dữ liệu)
+    setTimeout(() => {
+      setWorkHistory(fakeData);
+    }, 1000);
   }, []);
 
   return (

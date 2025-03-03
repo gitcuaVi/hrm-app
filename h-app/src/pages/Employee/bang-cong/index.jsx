@@ -1,13 +1,13 @@
-"use client";
+
 
 import React, { useEffect, useState } from "react";
-import { Select } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar } from "@/components/ui/calendar"; 
+import { Select, Typography, Calendar, Row, Col, Spin } from "antd";
 import dayjs from "dayjs";
-import getWorkData from "@/store/slice/workCalendarSlice";
-import "@/styles/bangcong.css";
+import  getWorkData  from "@/store/slice/workCalendarSlice";
+import "@/styles/bangcong.css"; 
 import profileImg from "@/assets/profile.jpg";
+
+const { Text } = Typography;
 
 const WorkCalendar = () => {
   const [year, setYear] = useState(2025);
@@ -36,65 +36,61 @@ const WorkCalendar = () => {
 
   const dateCellRender = (value) => {
     const dateKey = dayjs(value).format("YYYY-MM-DD");
-    return workData[dateKey] ? <div className="text-xs font-semibold">{workData[dateKey]}</div> : null;
+    return workData[dateKey] ? <div>{workData[dateKey]}</div> : null;
   };
 
   return (
-    <div className="p-4">
+    <div>
       {/* Hồ sơ cá nhân */}
-      <div className="flex items-center gap-4 p-4 bg-gray-100 rounded-lg shadow-md">
-        <img src={profileImg} alt="Profile" className="w-16 h-16 rounded-full" />
-        <div>
-          <p className="text-lg font-bold">Đinh Hoàng Lượm</p>
-          <p className="text-sm text-gray-500">BL-HCM</p>
-        </div>
+      <div className="profile">
+        <img src={profileImg} alt="Profile" className="profile-img" />
+        <div className="name">Đinh Hoàng Lượm</div>
+        <div className="location">BL-HCM</div>
       </div>
 
       {/* Chọn năm & tháng */}
-      <div className="flex gap-4 mt-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Chọn năm:</label>
-          <Select value={year} onChange={(val) => setYear(Number(val))}>
+      <Row justify="center" gutter={16} className="select-container">
+        <Col className="select-group">
+          <label htmlFor="year">Chọn năm:</label>
+          <Select id="year" value={year} onChange={setYear} className="custom-select">
             {[2024, 2025, 2026].map((y) => (
-              <option key={y} value={y}>
+              <Select.Option key={y} value={y}>
                 {y}
-              </option>
+              </Select.Option>
             ))}
           </Select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Chọn tháng:</label>
-          <Select value={month} onChange={(val) => setMonth(Number(val))}>
+        </Col>
+        <Col className="select-group">
+          <label htmlFor="month">Chọn tháng:</label>
+          <Select id="month" value={month} onChange={setMonth} className="custom-select">
             {Array.from({ length: 12 }, (_, i) => (
-              <option key={i} value={i + 1}>
+              <Select.Option key={i} value={i + 1}>
                 {`Tháng ${i + 1}`}
-              </option>
+              </Select.Option>
             ))}
           </Select>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
       {/* Hiển thị dữ liệu */}
       {loading ? (
-        <Skeleton className="h-20 w-full mt-4" />
+        <Spin size="large" style={{ display: "block", margin: "20px auto" }} />
       ) : error ? (
-        <p className="text-red-500 mt-4">{error}</p>
+        <Text type="danger">{error}</Text>
       ) : (
         <>
-          <p className="mt-4 text-lg font-medium">
-            Tổng số ngày công đã làm: <span className="text-green-600">{totalDaysWorked}</span> ngày
-          </p>
-          <div className="mt-4">
-            <Calendar
-              mode="default"
-              className="rounded-lg shadow-md"
-              onDateSelect={(date) => {
-                setYear(dayjs(date).year());
-                setMonth(dayjs(date).month() + 1);
-              }}
-              renderCell={dateCellRender}
-            />
-          </div>
+          <Text className="total-days">
+            Tổng số ngày công đã làm: <Text type="success">{totalDaysWorked}</Text> ngày
+          </Text>
+          <Calendar
+            fullscreen={false}
+            dateCellRender={dateCellRender}
+            headerRender={() => null}
+            onPanelChange={(date) => {
+              setYear(date.year());
+              setMonth(date.month() + 1);
+            }}
+          />
         </>
       )}
     </div>

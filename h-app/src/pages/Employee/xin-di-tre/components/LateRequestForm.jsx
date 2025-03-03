@@ -1,15 +1,8 @@
-"use client";
-
 
 import React, { useEffect } from "react";
-import TimePicker from "react-time-picker";
-import {Form} from "@/components/ui/form"
-import {Select} from "@/components/ui/select"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
+import { Button, Card, DatePicker, Form, Input, Select, TimePicker } from "antd";
 import dayjs from "dayjs";
+import "antd/dist/reset.css";
 
 const { Option } = Select;
 
@@ -35,7 +28,7 @@ const LateRequestForm = ({ onSubmit, loading }) => {
         </Form.Item>
         
         <Form.Item label="Ngày" name="date" > 
-          <Calendar className="full-width" format="DD/MM/YYYY" />
+          <DatePicker className="full-width" format="DD/MM/YYYY" />
         </Form.Item>
 
         <Form.Item label="Giờ" name="time"> 

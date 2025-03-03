@@ -11,6 +11,7 @@ import OvertimeRequest from "./pages/Employee/tang-ca";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { WebApp } from "@twa-dev/sdk";
 import TelegramAuth from "./pages/login/index";
+import endPoint from "@/routers/router";
 
 const App = () => {
   useEffect(() => {
@@ -24,20 +25,20 @@ const App = () => {
     }
   }, []);
 
+
+
   return (
     <ErrorBoundary>
       <Router>
         <Routes>
-          <Route path="/login" element={<TelegramAuth />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Navigate to="/login" />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/thong-tin" element={<EmployeeProfile />} />
-            <Route path="/bang-cong" element={<Attendance />} />
-            <Route path="/bang-luong" element={<EmployeeSalary />} />
-            <Route path="/xin-nghi" element={<LeaveRequest />} />
-            <Route path="/xin-di-tre" element={<LateRequest />} />
-            <Route path="/tang-ca" element={<OvertimeRequest />} />
+          <Route path={endPoint.ALL} element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path={endPoint.THONGTIN} element={<EmployeeProfile />} />
+            <Route path={endPoint.BANGCONG} element={<Attendance />} />
+            <Route path={endPoint.BANGLUONG} element={<EmployeeSalary />} />
+            <Route path={endPoint.XINNGHI} element={<LeaveRequest />} />
+            <Route path={endPoint.XINDITRE} element={<LateRequest />} />
+            <Route path={endPoint.TANGCA} element={<OvertimeRequest />} />
           </Route>
         </Routes>
       </Router>
@@ -46,3 +47,38 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // return (
+  //   <ErrorBoundary>
+  //     <Router>
+  //       <Routes>
+  //         {/* <Route path="/login" element={<TelegramAuth />} /> */}
+  //         <Route path="/" element={<Layout />}>
+  //           {/* <Route index element={<Navigate to="/login" />} /> */}
+  //           <Route path="/dashboard" element={<Dashboard />} />
+  //           <Route path="/thong-tin" element={<EmployeeProfile />} />
+  //           <Route path="/bang-cong" element={<Attendance />} />
+  //           <Route path="/bang-luong" element={<EmployeeSalary />} />
+  //           <Route path="/xin-nghi" element={<LeaveRequest />} />
+  //           <Route path="/xin-di-tre" element={<LateRequest />} />
+  //           <Route path="/tang-ca" element={<OvertimeRequest />} />
+  //         </Route>
+  //       </Routes>
+  //     </Router>
+  //   </ErrorBoundary>
+  // );

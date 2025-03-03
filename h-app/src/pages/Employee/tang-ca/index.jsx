@@ -1,11 +1,12 @@
-"use client";
 
 
-import React from "react";
-import { Alert } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import React, { useState } from "react";
+import { Spin, Typography } from "antd";
 import OvertimeRequestForm from "./components/OvertimeRequestForm";
-import useOvertimeRequest from "@/store/slice/overtimeRequestSlice";
+import useOvertimeRequest from "@/store/slice/overtimeRequestSlice"; 
+
+const { Text } = Typography;
 
 const OvertimeRequest = () => {
   const { sendOvertimeRequest, loading, error, successMessage } = useOvertimeRequest();
@@ -19,13 +20,13 @@ const OvertimeRequest = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Đăng ký làm tăng ca</h2>
+    <div>
+      <h2 className="form-title">Đăng ký làm tăng ca</h2>
 
-      {/* Hiển thị thông báo */}
-      {loading && <Skeleton className="h-8 w-full mb-4" />}
-      {error && <Alert variant="destructive" className="mb-4">{error}</Alert>}
-      {successMessage && <Alert variant="success" className="mb-4">{successMessage}</Alert>}
+      {/* Hiển thị thông báo nếu có */}
+      {loading && <Spin size="large" style={{ display: "block", margin: "10px auto" }} />}
+      {error && <Text type="danger">{error}</Text>}
+      {successMessage && <Text type="success">{successMessage}</Text>}
 
       {/* Form đăng ký tăng ca */}
       <OvertimeRequestForm onSubmit={handleSubmit} loading={loading} />
