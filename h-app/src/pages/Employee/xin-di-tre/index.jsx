@@ -1,3 +1,6 @@
+"use client"
+
+
 import React, { useState } from "react";
 import { Spin, Typography } from "antd";
 import LateRequestForm from "./components/LateRequestForm"; 
