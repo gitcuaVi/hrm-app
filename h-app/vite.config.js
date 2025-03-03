@@ -2,13 +2,14 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import tailwindcss from "@tailwindcss/vite"
 
 // Fix lỗi __dirname khi dùng ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(),tailwindcss()],
   base: "./", 
 
   resolve: {
@@ -31,7 +32,6 @@ export default defineConfig({
 
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('antd')) return 'antd';
             if (id.includes('react')) return 'react-vendor';
             return 'vendor';
           }

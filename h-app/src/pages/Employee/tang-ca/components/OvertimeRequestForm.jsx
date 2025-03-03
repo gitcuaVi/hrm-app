@@ -1,8 +1,11 @@
 
 import React, { useEffect } from "react";
-import { Button, Card, DatePicker, Form, Select } from "antd";
+import {Form} from "@/components/ui/form"
+import {Select} from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Calendar } from "@/components/ui/calendar"
 import dayjs from "dayjs";
-import "antd/dist/reset.css";
 
 const { Option } = Select;
 
@@ -22,7 +25,7 @@ const OvertimeRequestForm = ({ onSubmit, loading }) => {
       <Form form={form} layout="vertical" onFinish={onSubmit}>
         {/* Chọn ngày đăng ký */}
         <Form.Item label="Ngày đăng ký" name="date"> 
-          <DatePicker className="full-width" format="DD/MM/YYYY" />
+          <Calendar className="full-width" format="DD/MM/YYYY" />
         </Form.Item>
         
         {/* Chọn ca làm */}
