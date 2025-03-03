@@ -1,4 +1,4 @@
-
+import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Input, Card } from "antd";
@@ -18,16 +18,16 @@ export default function TelegramAuth() {
     }
   }, []);
   
-  const sendOtp = async () => {
-    if (!user) return;
-    try {
-      const response = await axios.post("https://your-server.com/send-otp", { chatId: user.id });
-      setMessage(response.data.message);
-    } catch (error) {
-      setMessage("Lỗi khi gửi OTP.");
-    }
-  };
-  
+const sendOtp = async () => {
+  if (!user) return;
+  try {
+    const response = await axios.post("https://your-server.com/send-otp", { chatId: user.id });
+    setMessage(response.data.message);
+  } catch (error) {
+    setMessage("Lỗi khi gửi OTP.");
+  }
+};
+
 
   const verifyOtp = async () => {
     try {
