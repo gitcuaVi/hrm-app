@@ -1,4 +1,6 @@
 
+"use client";
+
 import React, { useEffect } from "react";
 import {Form} from "@/components/ui/form"
 import {Select} from "@/components/ui/select"
