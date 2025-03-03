@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Fix lỗi __dirname khi dùng ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -42,7 +41,7 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       target: 'esnext',
-      jsx: "automatic",  // 🛠️ Fix lỗi JSX
+      jsx: "automatic", // 🔥 Fix lỗi JSX
       loader: {
         '.js': 'jsx',
         '.ts': 'tsx',
