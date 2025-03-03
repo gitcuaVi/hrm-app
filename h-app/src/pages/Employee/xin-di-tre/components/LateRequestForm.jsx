@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useEffect } from "react";
 import { Button, Card, DatePicker, Form, Input, Select, TimePicker } from "antd";
