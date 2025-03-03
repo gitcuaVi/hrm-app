@@ -40,14 +40,10 @@ export default defineConfig({
     },
   },
 
-  optimizeDeps: {
-    esbuildOptions: {
-      target: 'esnext',
-      loader: {
-        '.js': 'jsx',
-        '.ts': 'tsx',
-      },
-    },
-  },
+  optimizeDeps: {  
+    esbuildOptions: {  
+      target: 'esnext',  
+    },  
+  },  
   
 });
