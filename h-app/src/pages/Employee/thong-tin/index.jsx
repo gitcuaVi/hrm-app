@@ -10,6 +10,7 @@ import profileImg from "@/assets/profile.jpg";
 import useEmployeeProfile from "@/store/slice/profileSlice";
 
 
+
 const EmployeeProfile = () => {
   const { employee } = useEmployeeProfile();
 

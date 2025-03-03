@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import tailwindcss from "@tailwindcss/vite"
 
 // Fix lỗi __dirname khi dùng ES module
 const __filename = fileURLToPath(import.meta.url);
