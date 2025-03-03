@@ -1,5 +1,5 @@
 // src/services/workService.js
-export const getWorkData = async (year, month) => {
+const getWorkData = async (year, month) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
@@ -25,4 +25,4 @@ export const getWorkData = async (year, month) => {
       }, 0);
     });
   };
-  
+  export default getWorkData;
