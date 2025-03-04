@@ -15,11 +15,16 @@
 
       useEffect(() => {
         console.log("🌍 Checking Telegram WebApp...");
+      
+        if (window.Telegram?.WebApp) {
+          console.log("✅ Telegram WebApp SDK Already Loaded");
+          window.Telegram.WebApp.expand();
+          return;
+        }
+      
         const script = document.createElement("script");
         script.src = "https://telegram.org/js/telegram-web-app.js";
         script.async = true;
-        document.body.appendChild(script);
-      
         script.onload = () => {
           console.log("✅ Telegram WebApp SDK Loaded");
           if (window.Telegram?.WebApp) {
@@ -29,6 +34,8 @@
             console.error("❌ Telegram WebApp not found!");
           }
         };
+      
+        document.body.appendChild(script);
       }, []);
       
     
