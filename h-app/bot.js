@@ -10,9 +10,6 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const otpStore = new Map();
 const otpCooldown = new Map();
 
-// 🌐 Link mini app HRM
-const WEB_APP_URL = "https://hrm-app-fawn.vercel.app/";
-
 // 🟢 Xử lý lệnh /start
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
@@ -74,7 +71,7 @@ bot.onText(/\/verify (\d{6})/, (msg, match) => {
     bot.sendMessage(chatId, "✅ Xác minh thành công! Nhấn vào nút dưới để mở ứng dụng:", {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "🚀 Mở Mini App", web_app: { url: "https://hrm-app-fawn.vercel.app" } }]
+          [{ text: "🚀 Mở Mini App", web_app: { url: "https://hrm-app-fawn.vercel.app/" } }]
         ]
       }
     });
