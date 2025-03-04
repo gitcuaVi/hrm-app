@@ -33,7 +33,7 @@
       
       
       return (
-        <ErrorBoundary>
+        // <ErrorBoundary>
           <Router>
             <Routes>
               <Route path="/" element={<Layout />}>
@@ -47,7 +47,7 @@
               </Route>
             </Routes>
           </Router>
-        </ErrorBoundary>
+        // </ErrorBoundary>
       );
     };
 
