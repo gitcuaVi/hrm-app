@@ -8,7 +8,7 @@ import EmployeeSalary from "./pages/Employee/bang-luong";
 import LeaveRequest from "./pages/Employee/xin-nghi";
 import LateRequest from "./pages/Employee/xin-di-tre";
 import OvertimeRequest from "./pages/Employee/tang-ca";
-import OtpPage from "./pages/login/index"; // 👈 Import trang OTP
+import OtpPage from "./pages/login/index";
 import ErrorBoundary from "./components/ErrorBoundary";
 import endPoint from "@/routers/router";
 
@@ -38,20 +38,15 @@ const App = () => {
     document.body.appendChild(script);
   }, []);
 
-  // Kiểm tra xem đã xác thực OTP chưa
+
   const isVerified = localStorage.getItem("isVerified") === "true";
 
   return (
     <ErrorBoundary>
       <Router>
         <Routes>
-          {/* ✅ Nếu chưa xác thực OTP, chuyển hướng đến /otp */}
           <Route path="/" element={<Navigate to={isVerified ? "/dashboard" : "/otp"} />} />
-          
-          {/* ✅ Trang OTP */}
           <Route path="/otp" element={<OtpPage />} />
-
-          {/* ✅ Trang chính sau khi xác thực */}
           <Route path="/" element={<Layout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path={endPoint.THONGTIN} element={<EmployeeProfile />} />

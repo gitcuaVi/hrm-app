@@ -10,10 +10,10 @@ const OtpPage = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [isOtpExpired, setIsOtpExpired] = useState(true); // ✅ Trạng thái kiểm soát OTP hết hạn
+  const [isOtpExpired, setIsOtpExpired] = useState(true); //  Trạng thái kiểm soát OTP hết hạn
   const navigate = useNavigate();
 
-  // 📌 Tạo OTP mới
+  // Tạo OTP mới
   const generateOtp = () => {
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
     const expiryTime = Date.now() + 60000; // ⏳ Hết hạn sau 1 phút (60,000ms)
@@ -25,16 +25,16 @@ const OtpPage = () => {
     setIsVerified(false);
     setError(null);
     setTimeLeft(60); // 🕒 Bắt đầu đếm ngược 60 giây
-    setIsOtpExpired(false); // ⛔ Ngăn chặn việc nhận OTP mới
+    setIsOtpExpired(false); // Ngăn chặn việc nhận OTP mới
 
     message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 1 phút)`);
   };
 
-  // 📌 Xác minh OTP
+  // Xác minh OTP
   const verifyOtp = () => {
     if (otp === generatedOtp) {
       setIsVerified(true);
-      localStorage.setItem("isVerified", "true"); // ✅ Lưu trạng thái xác thực
+      localStorage.setItem("isVerified", "true"); // Lưu trạng thái xác thực
       message.success("✅ Xác minh thành công!");
 
       setTimeout(() => navigate("/dashboard"), 1500);
@@ -44,7 +44,7 @@ const OtpPage = () => {
     }
   };
 
-  // 🕒 Cập nhật bộ đếm ngược
+  // Cập nhật bộ đếm ngược
   useEffect(() => {
     const expiryTime = localStorage.getItem("otpExpiry");
 
@@ -59,7 +59,7 @@ const OtpPage = () => {
             localStorage.removeItem("otp");
             localStorage.removeItem("otpExpiry");
             setGeneratedOtp(""); 
-            setIsOtpExpired(true); // ✅ Cho phép nhận lại OTP
+            setIsOtpExpired(true); //  Cho phép nhận lại OTP
             message.warning("⏳ OTP đã hết hạn, vui lòng nhận lại.");
             return 0;
           }
