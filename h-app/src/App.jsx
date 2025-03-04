@@ -14,18 +14,21 @@
     const App = () => {
 
       useEffect(() => {
-        console.log("🟢 window.Telegram:", window.Telegram);
-        console.log("🟢 window.Telegram.WebApp:", window.Telegram?.WebApp);
+        const script = document.createElement("script");
+        script.src = "https://telegram.org/js/telegram-web-app.js";
+        script.async = true;
+        document.body.appendChild(script);
       
-        if (window.Telegram?.WebApp) {
-          console.log("✅ Telegram WebApp đã được khởi tạo:", window.Telegram.WebApp);
-          window.Telegram.WebApp.expand();
-        } else {
-          console.error("❌ Không tìm thấy Telegram WebApp! Kiểm tra cài đặt bot.");
-        }
+        script.onload = () => {
+          if (window.Telegram?.WebApp) {
+            console.log("✅ Telegram WebApp SDK Loaded");
+            window.Telegram.WebApp.expand();
+          } else {
+            console.error("❌ Telegram WebApp SDK Not Found");
+          }
+        };
       }, []);
-      
-        
+             
       
       return (
         <ErrorBoundary>
