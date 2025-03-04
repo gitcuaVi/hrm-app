@@ -73,7 +73,7 @@ bot.onText(/\/verify (\d{6})/, (msg, match) => {
           [
             {
               text: "🚀 Mở Mini App",
-              web_app: { url: "https://hrm-app-git-main-gia-vis-projects.vercel.app" }
+              web_app: { url: "https://hrm-app-fawn.vercel.app/" }
             },
           ],
         ],
