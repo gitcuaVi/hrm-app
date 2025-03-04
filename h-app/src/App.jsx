@@ -20,15 +20,17 @@
         document.body.appendChild(script);
       
         script.onload = () => {
+          console.log("Script loaded");
           if (window.Telegram?.WebApp) {
             console.log("✅ Telegram WebApp SDK Loaded");
+            console.log("WebApp:", window.Telegram.WebApp);
             window.Telegram.WebApp.expand();
           } else {
             console.error("❌ Telegram WebApp SDK Not Found");
           }
         };
       }, []);
-             
+      
       
       return (
         <ErrorBoundary>
