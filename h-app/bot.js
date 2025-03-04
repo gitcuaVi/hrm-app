@@ -71,13 +71,16 @@ bot.onText(/\/verify (\d{6})/, (msg, match) => {
   if (otpStore.get(chatId) === userOtp) {
     otpStore.delete(chatId);
 
-    bot.sendMessage(chatId, "✅ Xác minh thành công! Bấm vào nút dưới để mở ứng dụng:", {
+    bot.sendMessage(chatId, "✅ Xác minh thành công! Nhấn vào nút dưới để mở ứng dụng:", {
       reply_markup: {
-        inline_keyboard: [
-          [{ text: "🚀 Mở Mini App", web_app: { url: WEB_APP_URL } }],
+        keyboard: [
+          [{ text: "🚀 Mở Mini App", web_app: { url: WEB_APP_URL } }]
         ],
+        resize_keyboard: true,
+        one_time_keyboard: true,
       },
     });
+    
   } else {
     bot.sendMessage(chatId, "❌ OTP không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.");
   }
