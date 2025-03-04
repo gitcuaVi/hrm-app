@@ -75,8 +75,7 @@ bot.onText(/\/verify (\d{6})/, (msg, match) => {
         ]
       }
     });
-    
-    
+        
   } else {
     bot.sendMessage(chatId, "❌ OTP không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.");
   }
