@@ -9,7 +9,8 @@ const OtpPage = () => {
   const [generatedOtp, setGeneratedOtp] = useState(localStorage.getItem("otp") || "");
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(0); // ⏳ Thời gian còn lại (giây)
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [isOtpExpired, setIsOtpExpired] = useState(true); // ✅ Trạng thái kiểm soát OTP hết hạn
   const navigate = useNavigate();
 
   // 📌 Tạo OTP mới
@@ -24,6 +25,7 @@ const OtpPage = () => {
     setIsVerified(false);
     setError(null);
     setTimeLeft(60); // 🕒 Bắt đầu đếm ngược 60 giây
+    setIsOtpExpired(false); // ⛔ Ngăn chặn việc nhận OTP mới
 
     message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 1 phút)`);
   };
@@ -35,7 +37,6 @@ const OtpPage = () => {
       localStorage.setItem("isVerified", "true"); // ✅ Lưu trạng thái xác thực
       message.success("✅ Xác minh thành công!");
 
-      // ✅ Chuyển hướng đến trang chính
       setTimeout(() => navigate("/dashboard"), 1500);
     } else {
       setError("❌ OTP không hợp lệ hoặc đã hết hạn.");
@@ -57,7 +58,8 @@ const OtpPage = () => {
             clearInterval(timer);
             localStorage.removeItem("otp");
             localStorage.removeItem("otpExpiry");
-            setGeneratedOtp(""); // ❌ Xóa OTP khi hết hạn
+            setGeneratedOtp(""); 
+            setIsOtpExpired(true); // ✅ Cho phép nhận lại OTP
             message.warning("⏳ OTP đã hết hạn, vui lòng nhận lại.");
             return 0;
           }
@@ -65,17 +67,17 @@ const OtpPage = () => {
         });
       }, 1000);
 
-      return () => clearInterval(timer); // Cleanup khi component unmount
+      return () => clearInterval(timer);
     }
   }, [generatedOtp]);
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
       <Title level={3}>Xác thực OTP</Title>
-      <Button type="primary" onClick={generateOtp} style={{ marginBottom: 20 }}>
+      <Button type="primary" onClick={generateOtp} disabled={!isOtpExpired} style={{ marginBottom: 20 }}>
         📩 Nhận OTP
       </Button>
-      {generatedOtp && (
+      {generatedOtp && timeLeft > 0 && (
         <Text type="secondary">🔑 Mã OTP: {generatedOtp} (Hết hạn sau {timeLeft}s)</Text>
       )}
       <br />
