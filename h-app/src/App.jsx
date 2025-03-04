@@ -13,16 +13,13 @@
 
     const App = () => {
 
-      const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-      useEffect(() => {
-        if (window.Telegram?.WebApp) {
-          console.log("✅ Telegram WebApp đã được khởi tạo:", window.Telegram.WebApp);
-          window.Telegram.WebApp.expand();
-        } else {
-          console.error("❌ Không tìm thấy Telegram WebApp! Kiểm tra cài đặt bot.");
-        }
-      }, []);
+      if (window.Telegram?.WebApp) {
+        console.log("✅ Telegram WebApp đã được khởi tạo:", window.Telegram.WebApp);
+        window.Telegram.WebApp.expand();
+      } else {
+        console.error("❌ Không tìm thấy Telegram WebApp! Kiểm tra cài đặt bot.");
+      }
+      
         
       
       return (
