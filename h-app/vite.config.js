@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react-swc'; // Dùng SWC thay vì react thường
 import path from 'path';
 
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
   ],
   base: "./",
   resolve: {
@@ -17,22 +15,20 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
-
   },
   build: {
     rollupOptions: {
       output: {
         manualChunks(id) {
           if (id.includes('node_modules/antd')) {
-            return 'antd'; // Create a separate chunk for antd
+            return 'antd'; // Tách antd thành một chunk riêng
           }
         },
       },
     },
-    chunkSizeWarningLimit: 1000, // Increase chunk size limit
+    chunkSizeWarningLimit: 1000, // Tăng giới hạn chunk size cảnh báo
   },
   optimizeDeps: {
     include: ['antd', '@ant-design/icons'],
-    exclude: ['some-server-only-package'],
   },
 });
