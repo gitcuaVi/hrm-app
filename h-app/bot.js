@@ -118,7 +118,7 @@ bot.onText(/\/start/, (msg) => {
         [
           {
             text: "🌍 Mở Mini App",
-            web_app: { url: `https://hrm-app-fawn.vercel.app/?token=${authToken}` },
+            web_app: { url: `https://hrm-app-fawn.vercel.app/` },
           },
         ],
       ],
