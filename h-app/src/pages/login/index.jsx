@@ -1,79 +1,67 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Button, Input, Card, message as antdMessage } from "antd";
-import { WebApp } from "@twa-dev/sdk";
-import "antd/dist/reset.css";
+import React, { useState } from "react";
+import { Button, Input, Typography, message } from "antd";
+import { useNavigate } from "react-router-dom";
 
-export default function AuthPage() {
-  const [user, setUser] = useState(null);
-  const [inputOtp, setInputOtp] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
-  useEffect(() => {
-    if (typeof WebApp !== "undefined" && WebApp.initDataUnsafe) {
-      setUser(WebApp.initDataUnsafe.user);
+const { Title, Text } = Typography;
+
+const OtpPage = () => {
+  const [otp, setOtp] = useState("");
+  const [generatedOtp, setGeneratedOtp] = useState(localStorage.getItem("otp") || "");
+  const [isVerified, setIsVerified] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // 📌 Tạo OTP mới
+  const generateOtp = () => {
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(newOtp);
+    localStorage.setItem("otp", newOtp); // Lưu OTP tạm thời
+    setIsVerified(false);
+    setError(null);
+    message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 5 phút)`);
+
+    setTimeout(() => {
+      setGeneratedOtp("");
+      localStorage.removeItem("otp");
+    }, 300000);
+  };
+
+  // 📌 Xác minh OTP
+  const verifyOtp = () => {
+    if (otp === generatedOtp) {
+      setIsVerified(true);
+      localStorage.setItem("isVerified", "true"); // ✅ Lưu trạng thái xác thực
+      message.success("✅ Xác minh thành công!");
+      
+      // ✅ Chuyển hướng đến trang chính
+      setTimeout(() => navigate("/dashboard"), 1500);
     } else {
-      console.warn("WebApp không hoạt động trong môi trường này.");
-    }
-  }, []);
-
-  const sendOtp = async () => {
-    if (!user) {
-      antdMessage.error("Không tìm thấy thông tin Telegram!");
-      return;
-    }
-  
-    try {
-      const response = await axios.post("https://your-server.com/send-otp", { chatId: user.id });
-      antdMessage.success("✅ OTP đã được gửi đến Telegram của bạn!");
-    } catch (error) {
-      antdMessage.error("❌ Lỗi khi gửi OTP.");
+      setError("❌ OTP không hợp lệ hoặc đã hết hạn.");
+      message.error("❌ OTP không hợp lệ hoặc đã hết hạn.");
     }
   };
-  
-  
 
-  const verifyOtp = async () => {
-    if (!user) return;
-  
-    try {
-      const response = await axios.post("https://your-server.com/verify-otp", {
-        chatId: user.id,
-        otp: inputOtp,
-      });
-  
-      antdMessage.success("✅ Xác thực thành công!");
-      localStorage.setItem("userData", JSON.stringify(user)); // Lưu trạng thái đăng nhập
-      setIsAuthenticated(true);
-    } catch (error) {
-      antdMessage.error("❌ OTP không hợp lệ.");
-    }
-  };
-  
-  
   return (
-    <div className="flex flex-col items-center min-h-screen p-4">
-      <Card className="max-w-md w-full p-6 text-center">
-        <h1 className="text-xl font-bold mb-4">Xác thực OTP</h1>
-        {user ? (
-          isAuthenticated ? (
-            <p className="text-green-500 font-semibold">🎉 Bạn đã xác thực thành công!</p>
-          ) : (
-            <>
-              <p>Xin chào, {user.first_name}!</p>
-              <Button className="mt-4" type="primary" onClick={sendOtp}>Gửi OTP</Button>
-              <Input 
-                className="mt-4" 
-                placeholder="Nhập OTP" 
-                onChange={(e) => setInputOtp(e.target.value)} 
-              />
-              <Button className="mt-4" type="primary" onClick={verifyOtp}>Xác minh</Button>
-            </>
-          )
-        ) : (
-          <p>Vui lòng mở ứng dụng từ Telegram</p>
-        )}
-      </Card>
+    <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
+      <Title level={3}>Xác thực OTP</Title>
+      <Button type="primary" onClick={generateOtp} style={{ marginBottom: 20 }}>
+        📩 Nhận OTP
+      </Button>
+      <br />
+      <Input
+        placeholder="Nhập mã OTP"
+        value={otp}
+        onChange={(e) => setOtp(e.target.value)}
+        maxLength={6}
+        style={{ marginBottom: 10, textAlign: "center" }}
+      />
+      <Button type="primary" onClick={verifyOtp} disabled={!generatedOtp}>
+        🔑 Xác minh OTP
+      </Button>
+      {error && <Text type="danger">{error}</Text>}
+      {isVerified && <Text type="success">✅ Bạn đã xác minh thành công!</Text>}
     </div>
   );
-}
+};
+
+export default OtpPage;
