@@ -16,8 +16,7 @@
       const [isAuthenticated, setIsAuthenticated] = useState(false);
 
       useEffect(() => {
-        console.log("🌐 Kiểm tra Telegram:", window.Telegram);
-        if (window.Telegram?.WebApp) {
+        if (typeof window !== "undefined" && window.Telegram?.WebApp) {
           console.log("✅ Telegram WebApp:", window.Telegram.WebApp);
           window.Telegram.WebApp.expand();
         } else {
