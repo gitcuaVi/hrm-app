@@ -71,7 +71,7 @@ bot.onText(/\/verify (\d{6})/, (msg, match) => {
     bot.sendMessage(chatId, "✅ Xác minh thành công! Nhấn vào nút dưới để mở ứng dụng:", {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "🚀 Mở Mini App", web_app: { url: "https://hrm-app-fawn.vercel.app/" } }]
+          [{ text: "🚀 Mở Mini App", web_app: { url: "https://hrm-app-fawn.vercel.app" } }]
         ]
       }
     });
