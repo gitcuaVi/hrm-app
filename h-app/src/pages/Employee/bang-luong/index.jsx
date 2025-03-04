@@ -1,17 +1,26 @@
-
-
 import React, { useState } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import "@/styles/bangluong.css";
 import profileImg from "@/assets/profile.jpg";
 import useEmployeeSalary from "@/store/slice/employSalarySlice";
 import { Spin, Typography } from "antd";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
 
 const EmployeeSalary = () => {
-  const [selectedMonth, setSelectedMonth] = useState("02-2025");
-  const { salaryData, loading, error } = useEmployeeSalary(selectedMonth); // Lấy dữ liệu từ hook
+  const today = dayjs(); // Ngày hiện tại
+  const currentYear = today.year();
+  const currentMonth = today.month() + 1; // Tháng hiện tại (1-12)
+
+  const [selectedMonth, setSelectedMonth] = useState(`${currentMonth < 10 ? "0" + currentMonth : currentMonth}-${currentYear}`);
+  const { salaryData, loading, error } = useEmployeeSalary(selectedMonth);
+
+  // Danh sách tháng của năm hiện tại
+  const months = Array.from({ length: 12 }, (_, i) => {
+    const month = i + 1;
+    return `${month < 10 ? "0" + month : month}-${currentYear}`;
+  });
 
   return (
     <>
@@ -25,9 +34,16 @@ const EmployeeSalary = () => {
       {/* Chọn tháng */}
       <div className="month-picker">
         <label htmlFor="month">Chọn tháng:</label>
-        <select id="month" value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-          <option value="02-2025">02-2025</option>
-          <option value="01-2025">01-2025</option>
+        <select
+          id="month"
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+        >
+          {months.map((month) => (
+            <option key={month} value={month}>
+              {month}
+            </option>
+          ))}
         </select>
       </div>
 

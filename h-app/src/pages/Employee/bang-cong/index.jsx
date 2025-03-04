@@ -10,8 +10,9 @@ import profileImg from "@/assets/profile.jpg";
 const { Text } = Typography;
 
 const WorkCalendar = () => {
-  const [year, setYear] = useState(2025);
-  const [month, setMonth] = useState(2);
+  const today = dayjs();
+  const [year, setYear] = useState(today.year());
+  const [month, setMonth] = useState(today.month() + 1);
   const [workData, setWorkData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -85,6 +86,7 @@ const WorkCalendar = () => {
           <Calendar
             fullscreen={false}
             cellRender={dateCellRender}
+            value={dayjs(`${year}-${month}-01`)}
             headerRender={() => null}
             onPanelChange={(date) => {
               setYear(date.year());

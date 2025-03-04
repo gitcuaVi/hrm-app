@@ -28,7 +28,7 @@ const LateRequestForm = ({ onSubmit, loading }) => {
         </Form.Item>
         
         <Form.Item label="Ngày" name="date" > 
-          <DatePicker className="full-width" format="DD/MM/YYYY" />
+          <DatePicker className="full-width" format="DD/MM/YYYY" placeholder="DD/MM/YYYY" />
         </Form.Item>
 
         <Form.Item label="Giờ" name="time"> 

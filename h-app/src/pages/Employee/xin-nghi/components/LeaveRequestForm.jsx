@@ -32,13 +32,13 @@ const LeaveRequestForm = ({ onSubmit, loading }) => {
           </Form.Item>
         )}
 
-        <Form.Item label="Ngày bắt đầu" name="startDate" placeholder="DD/MM/YYYY">
-          <DatePicker className="full-width" format="DD/MM/YYYY" />
+        <Form.Item label="Ngày bắt đầu" name="startDate" >
+          <DatePicker className="full-width" format="DD/MM/YYYY" placeholder="DD/MM/YYYY" />
         </Form.Item>
 
         {leaveType === "multiple-days" && (
-          <Form.Item label="Ngày kết thúc" name="endDate">
-            <DatePicker className="full-width" format="DD/MM/YYYY" />
+          <Form.Item label="Ngày kết thúc" name="endDate" >
+            <DatePicker className="full-width" format="DD/MM/YYYY" placeholder="DD/MM/YYYY" />
           </Form.Item>
         )}
 
