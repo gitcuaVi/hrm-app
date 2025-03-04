@@ -37,7 +37,7 @@
           <Router>
             <Routes>
               <Route path="/" element={<Layout />}>
-                <Route index element={<Dashboard />} />
+                <Route path="/" element={<Dashboard />} />
                 <Route path={endPoint.THONGTIN} element={<EmployeeProfile />} />
                 <Route path={endPoint.BANGCONG} element={<Attendance />} />
                 <Route path={endPoint.BANGLUONG} element={<EmployeeSalary />} />
