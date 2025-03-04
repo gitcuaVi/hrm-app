@@ -18,28 +18,39 @@ export default function AuthPage() {
   }, []);
 
   const sendOtp = async () => {
-    if (!user) return;
+    if (!user) {
+      antdMessage.error("Không tìm thấy thông tin Telegram!");
+      return;
+    }
+  
     try {
       const response = await axios.post("https://your-server.com/send-otp", { chatId: user.id });
-      antdMessage.success("OTP đã được gửi!");
+      antdMessage.success("✅ OTP đã được gửi đến Telegram của bạn!");
     } catch (error) {
-      antdMessage.error("Lỗi khi gửi OTP.");
+      antdMessage.error("❌ Lỗi khi gửi OTP.");
     }
   };
+  
+  
 
   const verifyOtp = async () => {
+    if (!user) return;
+  
     try {
       const response = await axios.post("https://your-server.com/verify-otp", {
         chatId: user.id,
         otp: inputOtp,
       });
+  
       antdMessage.success("✅ Xác thực thành công!");
+      localStorage.setItem("userData", JSON.stringify(user)); // Lưu trạng thái đăng nhập
       setIsAuthenticated(true);
     } catch (error) {
       antdMessage.error("❌ OTP không hợp lệ.");
     }
   };
-
+  
+  
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
       <Card className="max-w-md w-full p-6 text-center">
