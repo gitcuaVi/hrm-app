@@ -12,8 +12,13 @@ import endPoint from "@/routers/router";
 
 const App = () => {
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
-    console.log("Telegram initData:", window.Telegram?.WebApp?.initData);
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      setIsAuthenticated(true);
+    }
   }, []);
   
   return (
