@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React ,{ useState, useEffect } from "react";
 // import { getSalaryData } from "@/store/slice/SalarySlice"; // Khi cần fetch API thì import hàm này
 
 const useEmployeeSalary = (selectedMonth) => {
