@@ -11,6 +11,11 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import endPoint from "@/routers/router";
 
 const App = () => {
+
+  useEffect(() => {
+    console.log("Telegram initData:", window.Telegram?.WebApp?.initData);
+  }, []);
+  
   return (
     <ErrorBoundary>
       <Router>
