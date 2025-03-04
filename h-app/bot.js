@@ -8,7 +8,6 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "👋 Chào mừng! Nhấn vào nút bên dưới để mở ứng dụng:",
     {
       reply_markup: {
         inline_keyboard: [
