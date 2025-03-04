@@ -3,18 +3,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// 🔥 Khởi tạo bot với polling (có thể đổi sang webhook nếu cần)
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
 // 🔐 Lưu trữ OTP tạm thời
 const otpStore = new Map();
 const otpCooldown = new Map();
 
-// 🟢 Xử lý lệnh /start
+// 🟢 Lệnh /start
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(
     msg.chat.id,
-    "👋 Chào mừng! Hãy sử dụng các nút bên dưới để nhận và xác thực OTP:",
+    "👋 Chào mừng! Nhấn vào nút bên dưới để nhận và xác minh OTP:",
     {
       reply_markup: {
         inline_keyboard: [
@@ -26,17 +25,17 @@ bot.onText(/\/start/, (msg) => {
   );
 });
 
-// 🟢 Xử lý callback từ các nút bấm
+// 🟢 Xử lý callback_query
 bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
-  bot.answerCallbackQuery(query.id); // ✅ Trả lời callback ngay lập tức để tránh lỗi 400 Bad Request
+  bot.answerCallbackQuery(query.id); // ✅ Trả lời callback ngay để tránh lỗi 400
 
   if (query.data === "get_otp") {
     const lastSent = otpCooldown.get(chatId);
     const now = Date.now();
 
     if (lastSent && now - lastSent < 30000) {
-      bot.sendMessage(chatId, "⏳ Vui lòng đợi 30 giây trước khi gửi OTP mới!");
+      bot.sendMessage(chatId, "⏳ Vui lòng đợi 30 giây trước khi nhận OTP mới!");
       return;
     }
 
@@ -71,17 +70,22 @@ bot.onText(/\/verify (\d{6})/, (msg, match) => {
     bot.sendMessage(chatId, "✅ Xác minh thành công! Nhấn vào nút dưới để mở ứng dụng:", {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "🚀 Mở Mini App", web_app: { url: "https://hrm-app-fawn.vercel.app" } }]
-        ]
-      }
+          [
+            {
+              text: "🚀 Mở Mini App",
+              web_app: { url: "https://hrm-app-fawn.vercel.app" },
+            },
+          ],
+        ],
+      },
     });
-        
+
   } else {
     bot.sendMessage(chatId, "❌ OTP không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.");
   }
 });
 
-// 🚀 Kiểm tra kết nối
+// 🚀 Xử lý lỗi polling
 bot.on("polling_error", (error) => {
   console.error("⚠️ Lỗi polling:", error.message);
 });
