@@ -35,12 +35,12 @@ const OtpPage = () => {
     if (otp === generatedOtp) {
       setIsVerified(true);
       localStorage.setItem("isVerified", "true"); // Lưu trạng thái xác thực
-      message.success("✅ Xác minh thành công!");
+      message.success("Xác minh thành công!");
 
       setTimeout(() => navigate("/dashboard"), 1500);
     } else {
       setError("❌ OTP không hợp lệ hoặc đã hết hạn.");
-      message.error("❌ OTP không hợp lệ hoặc đã hết hạn.");
+      message.error(" OTP không hợp lệ hoặc đã hết hạn.");
     }
   };
 
