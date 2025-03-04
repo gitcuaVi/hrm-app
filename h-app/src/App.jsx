@@ -1,5 +1,5 @@
     import React, { useState, useEffect } from "react";
-    import { HashRouter as Router, Routes, Route } from "react-router-dom";
+    import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
     import Layout from "./layouts/HomeLayout";
     import Dashboard from "./pages/dashboard";
     import EmployeeProfile from "./pages/Employee/thong-tin";
@@ -14,6 +14,7 @@
     const App = () => {
 
       useEffect(() => {
+        console.log("🌍 Checking Telegram WebApp...");
         const script = document.createElement("script");
         script.src = "https://telegram.org/js/telegram-web-app.js";
         script.async = true;
@@ -21,18 +22,16 @@
       
         script.onload = () => {
           console.log("✅ Telegram WebApp SDK Loaded");
-      
-          setTimeout(() => {
-            if (window.Telegram?.WebApp) {
-              console.log("📌 Expanding WebApp...");
-              window.Telegram.WebApp.expand();
-            }
-          }, 1000); // 👈 Thêm timeout để tránh lỗi
+          if (window.Telegram?.WebApp) {
+            console.log("📌 Expanding WebApp...");
+            window.Telegram.WebApp.expand();
+          } else {
+            console.error("❌ Telegram WebApp not found!");
+          }
         };
       }, []);
       
-      
-      
+    
       
       return (
         <ErrorBoundary>
