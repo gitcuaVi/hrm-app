@@ -5,10 +5,12 @@ dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
-const otpStore = new Map(); // Lưu OTP tạm thời
-const otpCooldown = new Map(); // Lưu thời gian gửi OTP gần nhất
+const otpStore = new Map(); 
+const otpCooldown = new Map();
 
-// Xử lý lệnh /start
+const WEB_APP_URL = "https://hrm-app-fawn.vercel.app/";
+
+
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, "👋 Chào mừng! Hãy sử dụng các nút bên dưới để nhận và xác thực OTP:", {
     reply_markup: {
@@ -20,7 +22,7 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// Xử lý khi nhấn "Nhận OTP"
+
 bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
 
@@ -45,20 +47,27 @@ bot.on("callback_query", (query) => {
   bot.answerCallbackQuery(query.id);
 });
 
-// Xác minh OTP bằng lệnh
+
 bot.onText(/\/verify (\d{6})/, (msg, match) => {
   const chatId = msg.chat.id;
   const userOtp = match[1];
 
   if (otpStore.get(chatId) === userOtp) {
     otpStore.delete(chatId);
-    bot.sendMessage(chatId, "✅ Xác minh thành công!");
+
+    bot.sendMessage(chatId, "✅ Xác minh thành công! Bấm vào nút dưới để mở ứng dụng:", {
+      reply_markup: {
+        inline_keyboard: [
+          [{ text: "🚀 Mở Mini App", web_app: { url: WEB_APP_URL } }],
+        ],
+      },
+    });
   } else {
     bot.sendMessage(chatId, "❌ OTP không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.");
   }
 });
 
-// Xử lý khi nhấn "Xác minh OTP"
+
 bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
 
