@@ -20,15 +20,17 @@
         document.body.appendChild(script);
       
         script.onload = () => {
-          if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.ready();
-            window.Telegram.WebApp.expand();
-            console.log("✅ Telegram WebApp SDK Loaded");
-          } else {
-            console.error("❌ Telegram WebApp SDK Not Found");
-          }
+          console.log("✅ Telegram WebApp SDK Loaded");
+      
+          setTimeout(() => {
+            if (window.Telegram?.WebApp) {
+              console.log("📌 Expanding WebApp...");
+              window.Telegram.WebApp.expand();
+            }
+          }, 1000); // 👈 Thêm timeout để tránh lỗi
         };
       }, []);
+      
       
       
       
