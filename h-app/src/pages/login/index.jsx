@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Typography, message } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -9,21 +9,23 @@ const OtpPage = () => {
   const [generatedOtp, setGeneratedOtp] = useState(localStorage.getItem("otp") || "");
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(0); // ⏳ Thời gian còn lại (giây)
   const navigate = useNavigate();
 
   // 📌 Tạo OTP mới
   const generateOtp = () => {
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiryTime = Date.now() + 60000; // ⏳ Hết hạn sau 1 phút (60,000ms)
+
+    localStorage.setItem("otp", newOtp);
+    localStorage.setItem("otpExpiry", expiryTime.toString());
+
     setGeneratedOtp(newOtp);
-    localStorage.setItem("otp", newOtp); // Lưu OTP tạm thời
     setIsVerified(false);
     setError(null);
-    message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 5 phút)`);
+    setTimeLeft(60); // 🕒 Bắt đầu đếm ngược 60 giây
 
-    setTimeout(() => {
-      setGeneratedOtp("");
-      localStorage.removeItem("otp");
-    }, 300000);
+    message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 1 phút)`);
   };
 
   // 📌 Xác minh OTP
@@ -32,7 +34,7 @@ const OtpPage = () => {
       setIsVerified(true);
       localStorage.setItem("isVerified", "true"); // ✅ Lưu trạng thái xác thực
       message.success("✅ Xác minh thành công!");
-      
+
       // ✅ Chuyển hướng đến trang chính
       setTimeout(() => navigate("/dashboard"), 1500);
     } else {
@@ -41,12 +43,41 @@ const OtpPage = () => {
     }
   };
 
+  // 🕒 Cập nhật bộ đếm ngược
+  useEffect(() => {
+    const expiryTime = localStorage.getItem("otpExpiry");
+
+    if (expiryTime) {
+      const timeRemaining = Math.max(0, Math.floor((Number(expiryTime) - Date.now()) / 1000));
+      setTimeLeft(timeRemaining);
+
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            localStorage.removeItem("otp");
+            localStorage.removeItem("otpExpiry");
+            setGeneratedOtp(""); // ❌ Xóa OTP khi hết hạn
+            message.warning("⏳ OTP đã hết hạn, vui lòng nhận lại.");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // Cleanup khi component unmount
+    }
+  }, [generatedOtp]);
+
   return (
     <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
       <Title level={3}>Xác thực OTP</Title>
       <Button type="primary" onClick={generateOtp} style={{ marginBottom: 20 }}>
         📩 Nhận OTP
       </Button>
+      {generatedOtp && (
+        <Text type="secondary">🔑 Mã OTP: {generatedOtp} (Hết hạn sau {timeLeft}s)</Text>
+      )}
       <br />
       <Input
         placeholder="Nhập mã OTP"
