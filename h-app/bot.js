@@ -22,7 +22,7 @@ bot.onText(/\/start/, (msg) => {
     }
   );
 });
-
+console.log("🚀 Bot đang chạy...");
 
 // // 🔐 Lưu trữ OTP tạm thời
 // const otpStore = new Map();
