@@ -95,34 +95,35 @@
 
 
 
-bot.onText(/\/verify (\d{6})/, (msg, match) => {
+import TelegramBot from "node-telegram-bot-api";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+// 🔥 Hàm tạo token đơn giản (hoặc dùng JWT)
+const generateToken = (chatId) => {
+  return Buffer.from(`${chatId}:${Date.now()}`).toString("base64");
+};
+
+// 🟢 Xử lý lệnh /start
+bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
-  const userOtp = match[1];
+  const authToken = generateToken(chatId);
 
-  if (otpStore.get(chatId) === userOtp) {
-    otpStore.delete(chatId);
-
-    // Tạo token đơn giản (có thể dùng JWT nếu cần)
-    const authToken = Buffer.from(`${chatId}:${Date.now()}`).toString("base64");
-
-    bot.sendMessage(
-      chatId,
-      "✅ Xác minh thành công! Nhấn vào nút dưới để mở ứng dụng:",
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "🚀 Mở Mini App",
-                web_app: { url: `https://hrm-app-fawn.vercel.app/?token=${authToken}` },
-              },
-            ],
-          ],
-        },
-      }
-    );
-
-  } else {
-    bot.sendMessage(chatId, "❌ OTP không hợp lệ hoặc đã hết hạn. Vui lòng thử lại.");
-  }
+  bot.sendMessage(chatId, "🚀 Chào mừng! Nhấn vào nút dưới để mở ứng dụng:", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "🌍 Mở Mini App",
+            web_app: { url: `https://hrm-app-fawn.vercel.app/?token=${authToken}` },
+          },
+        ],
+      ],
+    },
+  });
 });
+
+console.log("🚀 Bot đang chạy...");
