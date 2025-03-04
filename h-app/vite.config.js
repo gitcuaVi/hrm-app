@@ -2,11 +2,13 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import legacy from "@vitejs/plugin-legacy";
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    legacy(),
   ],
   base: "./",
   resolve: {
@@ -24,12 +26,13 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules/antd')) {
-            return 'antd'; // Create a separate chunk for antd
+            return 'antd'; 
           }
         },
+        chunkFileNames: '[name]-[hash].js',
       },
     },
-    chunkSizeWarningLimit: 1000, // Increase chunk size limit
+    chunkSizeWarningLimit: 1000, 
   },
   optimizeDeps: {
     include: ['antd', '@ant-design/icons'],
