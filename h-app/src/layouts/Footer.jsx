@@ -14,7 +14,7 @@ const Footer = () => {
       <SlHome 
         className="icon" 
         style={{ color: isHome ? "#2563eb" : "black" }} 
-        onClick={() => navigate("/")} 
+        onClick={() => navigate("/dashboard")} 
       />
       <GoBell className="icon" />
     </div>
