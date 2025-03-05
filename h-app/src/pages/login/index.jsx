@@ -1,3 +1,87 @@
+// import React, { useState, useEffect } from "react";
+// import { Button, Input, Typography, message } from "antd";
+// import { useNavigate } from "react-router-dom";
+
+// const { Title, Text } = Typography;
+
+// const OtpPage = () => {
+//   const [otp, setOtp] = useState("");
+//   const [generatedOtp, setGeneratedOtp] = useState("");
+//   const [timeLeft, setTimeLeft] = useState(0);
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     sessionStorage.removeItem("isVerified");
+//   }, []);
+
+//   const generateOtp = async () => {
+//     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+//     setGeneratedOtp(newOtp);
+//     setTimeLeft(60);
+
+//     message.success(`Mã OTP của bạn: ${newOtp}`);
+//   };
+
+//   const verifyOtp = async () => {
+//     if (otp === generatedOtp) {
+//       try {
+//         const response = await fetch("https://your-api.com/verify-otp", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({ otp })
+//         });
+        
+//         if (response.ok) {
+//           sessionStorage.setItem("isVerified", "true");
+//           message.success("Xác minh thành công!");
+//           navigate("/dashboard");
+//         } else {
+//           message.error("Xác minh thất bại!");
+//         }
+//       } catch (error) {
+//         message.error("Lỗi kết nối đến server");
+//       }
+//     } else {
+//       message.error("OTP không hợp lệ hoặc đã hết hạn.");
+//     }
+//   };
+
+//   useEffect(() => {
+//     if (timeLeft > 0) {
+//       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+//       return () => clearTimeout(timer);
+//     } else {
+//       setGeneratedOtp("");
+//     }
+//   }, [timeLeft]);
+
+//   return (
+//     <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
+//       <Title level={3}>Xác thực OTP</Title>
+//       <Button type="primary" onClick={generateOtp} disabled={timeLeft > 0}>
+//         📩 Nhận OTP
+//       </Button>
+//       {generatedOtp && timeLeft > 0 && (
+//         <Text type="secondary">🔑 OTP: {generatedOtp} (Hết hạn sau {timeLeft}s)</Text>
+//       )}
+//       <br />
+//       <Input
+//         placeholder="Nhập mã OTP"
+//         value={otp}
+//         onChange={(e) => setOtp(e.target.value)}
+//         maxLength={6}
+//         style={{ marginBottom: 10, textAlign: "center" }}
+//       />
+//       <Button type="primary" onClick={verifyOtp} disabled={!generatedOtp}>
+//         🔑 Xác minh OTP
+//       </Button>
+//     </div>
+//   );
+// };
+
+// export default OtpPage;
+
+
 import React, { useState, useEffect } from "react";
 import { Button, Input, Typography, message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -6,86 +90,49 @@ const { Title, Text } = Typography;
 
 const OtpPage = () => {
   const [otp, setOtp] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState(sessionStorage.getItem("otp") || "");
-  const [isVerified, setIsVerified] = useState(false);
-  const [error, setError] = useState(null);
+  const [generatedOtp, setGeneratedOtp] = useState("");
   const [timeLeft, setTimeLeft] = useState(0);
-  const [isOtpExpired, setIsOtpExpired] = useState(true);
   const navigate = useNavigate();
 
-  // Xóa trạng thái xác thực khi tải lại trang
   useEffect(() => {
     sessionStorage.removeItem("isVerified");
-    sessionStorage.removeItem("otp");
-    sessionStorage.removeItem("otpExpiry");
   }, []);
 
-  // Tạo OTP mới
-  const generateOtp = () => {
+  const generateOtp = async () => {
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiryTime = Date.now() + 60000;
-
-    sessionStorage.setItem("otp", newOtp);
-    sessionStorage.setItem("otpExpiry", expiryTime.toString());
-
     setGeneratedOtp(newOtp);
-    setIsVerified(false);
-    setError(null);
     setTimeLeft(60);
-    setIsOtpExpired(false);
 
-    message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 1 phút)`);
+    message.success(`Mã OTP của bạn: ${newOtp}`);
   };
 
-  // Xác minh OTP
-  const verifyOtp = () => {
+  const verifyOtp = async () => {
     if (otp === generatedOtp) {
-      setIsVerified(true);
       sessionStorage.setItem("isVerified", "true");
       message.success("Xác minh thành công!");
-
-      setTimeout(() => navigate("/dashboard"), 1500);
+      navigate("/dashboard");
     } else {
-      setError("❌ OTP không hợp lệ hoặc đã hết hạn.");
       message.error("OTP không hợp lệ hoặc đã hết hạn.");
     }
   };
 
-  // Cập nhật bộ đếm ngược
   useEffect(() => {
-    const expiryTime = sessionStorage.getItem("otpExpiry");
-
-    if (expiryTime) {
-      const timeRemaining = Math.max(0, Math.floor((Number(expiryTime) - Date.now()) / 1000));
-      setTimeLeft(timeRemaining);
-
-      const timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            sessionStorage.removeItem("otp");
-            sessionStorage.removeItem("otpExpiry");
-            setGeneratedOtp("");
-            setIsOtpExpired(true);
-            message.warning("⏳ OTP đã hết hạn, vui lòng nhận lại.");
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(timer);
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setGeneratedOtp("");
     }
-  }, [generatedOtp]);
+  }, [timeLeft]);
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto", textAlign: "center" }}>
       <Title level={3}>Xác thực OTP</Title>
-      <Button type="primary" onClick={generateOtp} disabled={!isOtpExpired} style={{ marginBottom: 20 }}>
+      <Button type="primary" onClick={generateOtp} disabled={timeLeft > 0}>
         📩 Nhận OTP
       </Button>
       {generatedOtp && timeLeft > 0 && (
-        <Text type="secondary">🔑 Mã OTP: {generatedOtp} (Hết hạn sau {timeLeft}s)</Text>
+        <Text type="secondary">🔑 OTP: {generatedOtp} (Hết hạn sau {timeLeft}s)</Text>
       )}
       <br />
       <Input
@@ -98,8 +145,6 @@ const OtpPage = () => {
       <Button type="primary" onClick={verifyOtp} disabled={!generatedOtp}>
         🔑 Xác minh OTP
       </Button>
-      {error && <Text type="danger">{error}</Text>}
-      {isVerified && <Text type="success">✅ Bạn đã xác minh thành công!</Text>}
     </div>
   );
 };
