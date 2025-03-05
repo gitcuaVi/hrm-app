@@ -35,7 +35,7 @@ Nhấn vào nút bên dưới để mở ứng dụng:`, {
                 [
                     {
                         text: "🚀 Mở Mini App",
-                        web_app: { url: `https://your-web-app.com/?id=${id}` },
+                        web_app: { url: `https://hrm-app-fawn.vercel.app/?id=${id}` },
                     },
                 ],
             ],
