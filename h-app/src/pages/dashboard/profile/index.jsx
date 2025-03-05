@@ -4,7 +4,7 @@ import profileImg from "@/assets/profile.jpg";
 
 const Profile = () => {
   const [searchParams] = useSearchParams();
-  const userParam = searchParams.get("user");
+  const userId = searchParams.get("id");
 
   const [user, setUser] = useState({
     id: "Không có ID",
@@ -13,25 +13,30 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (userParam) {
-      try {
-        console.log("📥 Dữ liệu từ URL trước decode:", userParam);
-        const decodedUser = JSON.parse(decodeURIComponent(userParam));
-  
-        console.log("✅ Dữ liệu sau decode:", decodedUser);
-        setUser(decodedUser);
-        localStorage.setItem("telegramUser", JSON.stringify(decodedUser));
-      } catch (error) {
-        console.error("❌ Lỗi khi giải mã JSON:", error);
-      }
-    } else {
-      const storedUser = localStorage.getItem("telegramUser");
+    if (userId) {
+      const storedUser = localStorage.getItem(`user_${userId}`);
       if (storedUser) {
-        setUser(JSON.parse(storedUser));
+        setUser(JSON.parse(storedUser)); // Lấy từ localStorage nếu có
+      } else {
+        fetch(`http://localhost:3000/users?id=${userId}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Không tìm thấy dữ liệu");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          if (data.length > 0) {
+            setUser(data[0]); // Lấy phần tử đầu tiên
+            localStorage.setItem(`user_${userId}`, JSON.stringify(data[0]));
+          } else {
+            console.error("❌ Không tìm thấy người dùng");
+          }
+        })
+        .catch((error) => console.error("❌ Lỗi khi lấy dữ liệu:", error));      
       }
     }
-  }, [userParam]);
-  
+  }, [userId]);
 
   return (
     <div className="profile">
