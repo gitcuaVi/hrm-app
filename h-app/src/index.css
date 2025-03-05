@@ -31,7 +31,7 @@ body {
     background: #2563eb;
     padding: 16px;
     margin-bottom: 15px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
   }
 
   .profile-img {
