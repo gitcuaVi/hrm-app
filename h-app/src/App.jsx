@@ -38,7 +38,6 @@ const App = () => {
     document.body.appendChild(script);
   }, []);
 
-
   const isVerified = localStorage.getItem("isVerified") === "true";
 
   return (

@@ -34,7 +34,7 @@ const OtpPage = () => {
   const verifyOtp = () => {
     if (otp === generatedOtp) {
       setIsVerified(true);
-      localStorage.setItem("isVerified", "true"); // Lưu trạng thái xác thực
+      localStorage.setItem("isVerified", "false"); // Lưu trạng thái xác thực
       message.success("Xác minh thành công!");
 
       setTimeout(() => navigate("/dashboard"), 1500);
