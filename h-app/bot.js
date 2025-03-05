@@ -1,6 +1,6 @@
+
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
@@ -8,32 +8,91 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const users = {}; // Lưu thông tin người dùng tạm thời
 
 bot.onText(/\/start/, (msg) => {
-  const { id, first_name, last_name, username } = msg.from;
-  users[id] = {
-    id,
-    name: `${first_name} ${last_name || ""}`,
-    username: username || "Không có username",
-  };
+    const { id, first_name, last_name, username } = msg.from;
+    users[id] = {
+        id,
+        name: `${first_name} ${last_name || ""}`,
+        username: username || "Không có username",
+    };
 
-  bot.sendMessage(
-    id,
-    "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:",
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "🚀 Mở Mini App",
-              web_app: { url: "https://hrm-app-fawn.vercel.app/?id=" + id },
-            },
-          ],
-        ],
-      },
-    }
-  );
+    bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: "🚀 Mở Mini App",
+                        web_app: { url: `https://hrm-app-fawn.vercel.app/otp?id=${id}` },
+                    },
+                ],
+            ],
+        },
+    });
 });
 
 console.log("🚀 Bot đang chạy...");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import TelegramBot from "node-telegram-bot-api";
+// import dotenv from "dotenv";
+
+// dotenv.config();
+
+// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+// const users = {}; // Lưu thông tin người dùng tạm thời
+
+// bot.onText(/\/start/, (msg) => {
+//   const { id, first_name, last_name, username } = msg.from;
+//   users[id] = {
+//     id,
+//     name: `${first_name} ${last_name || ""}`,
+//     username: username || "Không có username",
+//   };
+
+//   bot.sendMessage(
+//     id,
+//     "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:",
+//     {
+//       reply_markup: {
+//         inline_keyboard: [
+//           [
+//             {
+//               text: "🚀 Mở Mini App",
+//               web_app: { url: "https://hrm-app-fawn.vercel.app/?id=" + id },
+//             },
+//           ],
+//         ],
+//       },
+//     }
+//   );
+// });
+
+// console.log("🚀 Bot đang chạy...");
 
 
 
