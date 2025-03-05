@@ -7,13 +7,13 @@ const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const isHome = location.pathname === "/";
+  const isDashboard = location.pathname === "/dashboard";
 
   return (
     <div className="footer">
       <SlHome 
         className="icon" 
-        style={{ color: isHome ? "#2563eb" : "black" }} 
+        style={{ color: isDashboard ? "#2563eb" : "black" }} 
         onClick={() => navigate("/dashboard")} 
       />
       <GoBell className="icon" />
