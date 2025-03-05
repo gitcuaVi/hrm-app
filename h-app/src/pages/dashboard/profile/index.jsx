@@ -4,22 +4,31 @@ import profileImg from "@/assets/profile.jpg";
 
 const Profile = () => {
   const [searchParams] = useSearchParams();
-  const userId = searchParams.get("id");
+  const userParam = searchParams.get("user");
 
   const [user, setUser] = useState({
-    id: userId || "Không có ID",
-    name: "Đang tải...",
-    username: "Đang tải...",
+    id: "Không có ID",
+    name: "Chưa có dữ liệu",
+    username: "Chưa có username",
   });
 
   useEffect(() => {
-    if (userId) {
-      fetch(`https://your-server.com/getUser?id=${userId}`)
-        .then((res) => res.json())
-        .then((data) => setUser(data))
-        .catch(() => setUser({ id: userId, name: "Không tìm thấy", username: "Không có dữ liệu" }));
+    if (userParam) {
+      try {
+        const decodedUser = JSON.parse(decodeURIComponent(userParam));
+        setUser(decodedUser);
+        localStorage.setItem("telegramUser", JSON.stringify(decodedUser));
+      } catch (error) {
+        console.error("❌ Lỗi khi giải mã dữ liệu người dùng:", error);
+      }
+    } else {
+      // Nếu không có trong URL, lấy từ localStorage
+      const storedUser = localStorage.getItem("telegramUser");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
     }
-  }, [userId]);
+  }, [userParam]);
 
   return (
     <div className="profile">
