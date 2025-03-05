@@ -6,26 +6,33 @@ const { Title, Text } = Typography;
 
 const OtpPage = () => {
   const [otp, setOtp] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState(localStorage.getItem("otp") || "");
+  const [generatedOtp, setGeneratedOtp] = useState(sessionStorage.getItem("otp") || "");
   const [isVerified, setIsVerified] = useState(false);
   const [error, setError] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
-  const [isOtpExpired, setIsOtpExpired] = useState(true); //  Trạng thái kiểm soát OTP hết hạn
+  const [isOtpExpired, setIsOtpExpired] = useState(true);
   const navigate = useNavigate();
+
+  // Xóa trạng thái xác thực khi tải lại trang
+  useEffect(() => {
+    sessionStorage.removeItem("isVerified");
+    sessionStorage.removeItem("otp");
+    sessionStorage.removeItem("otpExpiry");
+  }, []);
 
   // Tạo OTP mới
   const generateOtp = () => {
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiryTime = Date.now() + 60000; // ⏳ Hết hạn sau 1 phút (60,000ms)
+    const expiryTime = Date.now() + 60000;
 
-    localStorage.setItem("otp", newOtp);
-    localStorage.setItem("otpExpiry", expiryTime.toString());
+    sessionStorage.setItem("otp", newOtp);
+    sessionStorage.setItem("otpExpiry", expiryTime.toString());
 
     setGeneratedOtp(newOtp);
     setIsVerified(false);
     setError(null);
-    setTimeLeft(60); // 🕒 Bắt đầu đếm ngược 60 giây
-    setIsOtpExpired(false); // Ngăn chặn việc nhận OTP mới
+    setTimeLeft(60);
+    setIsOtpExpired(false);
 
     message.success(`Mã OTP của bạn: ${newOtp} (Hết hạn sau 1 phút)`);
   };
@@ -34,19 +41,19 @@ const OtpPage = () => {
   const verifyOtp = () => {
     if (otp === generatedOtp) {
       setIsVerified(true);
-      localStorage.setItem("isVerified", "false"); // Lưu trạng thái xác thực
+      sessionStorage.setItem("isVerified", "true");
       message.success("Xác minh thành công!");
 
       setTimeout(() => navigate("/dashboard"), 1500);
     } else {
       setError("❌ OTP không hợp lệ hoặc đã hết hạn.");
-      message.error(" OTP không hợp lệ hoặc đã hết hạn.");
+      message.error("OTP không hợp lệ hoặc đã hết hạn.");
     }
   };
 
   // Cập nhật bộ đếm ngược
   useEffect(() => {
-    const expiryTime = localStorage.getItem("otpExpiry");
+    const expiryTime = sessionStorage.getItem("otpExpiry");
 
     if (expiryTime) {
       const timeRemaining = Math.max(0, Math.floor((Number(expiryTime) - Date.now()) / 1000));
@@ -56,10 +63,10 @@ const OtpPage = () => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
-            localStorage.removeItem("otp");
-            localStorage.removeItem("otpExpiry");
-            setGeneratedOtp(""); 
-            setIsOtpExpired(true); //  Cho phép nhận lại OTP
+            sessionStorage.removeItem("otp");
+            sessionStorage.removeItem("otpExpiry");
+            setGeneratedOtp("");
+            setIsOtpExpired(true);
             message.warning("⏳ OTP đã hết hạn, vui lòng nhận lại.");
             return 0;
           }
