@@ -5,7 +5,8 @@ import { Select, Typography, Calendar, Row, Col, Spin } from "antd";
 import dayjs from "dayjs";
 import  getWorkData  from "@/store/slice/workCalendarSlice";
 import "@/styles/bangcong.css"; 
-import profileImg from "@/assets/profile.jpg";
+import Profile from "@/pages/dashboard/profile";
+
 
 const { Text } = Typography;
 
@@ -42,12 +43,7 @@ const WorkCalendar = () => {
 
   return (
     <div>
-      {/* Hồ sơ cá nhân */}
-      <div className="profile">
-        <img src={profileImg} alt="Profile" className="profile-img" />
-        <div className="name">Đinh Hoàng Lượm</div>
-        <div className="location">BL-HCM</div>
-      </div>
+      <Profile />
 
       {/* Chọn năm & tháng */}
       <Row justify="center" gutter={16} className="select-container">

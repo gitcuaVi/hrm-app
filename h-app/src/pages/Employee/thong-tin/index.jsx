@@ -6,7 +6,7 @@ import "@/index.css";
 import { BiSolidContact } from "react-icons/bi";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { HiViewList } from "react-icons/hi";
-import profileImg from "@/assets/profile.jpg"; 
+import Profile from "@/pages/dashboard/profile";
 import useEmployeeProfile from "@/store/slice/profileSlice";
 
 
@@ -16,11 +16,7 @@ const EmployeeProfile = () => {
 
   return (
     <div>
-      <div className="profile">
-        <img src={profileImg} alt="Profile" className="profile-img" />
-        <div className="name">{employee.name}</div>
-        <div className="location">{employee.department}</div>
-      </div>
+      <Profile />
 
       <div className="profile-card">
         <div className="profile-info">

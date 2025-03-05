@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaClipboardList } from "react-icons/fa";
 import "@/styles/bangluong.css";
-import profileImg from "@/assets/profile.jpg";
+import Profile from "@/pages/dashboard/profile";
 import useEmployeeSalary from "@/store/slice/employSalarySlice";
 import { Spin, Typography } from "antd";
 import dayjs from "dayjs";
@@ -24,12 +24,7 @@ const EmployeeSalary = () => {
 
   return (
     <>
-      {/* Hồ sơ cá nhân */}
-      <div className="profile">
-        <img src={profileImg} alt="Profile" className="profile-img" />
-        <div className="name">Đinh Hoàng Lượm</div>
-        <div className="location">BL-HCM</div>
-      </div>
+      <Profile />
 
       {/* Chọn tháng */}
       <div className="month-picker">
