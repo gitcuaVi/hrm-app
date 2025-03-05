@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import fetch from "node-fetch"; // Dùng để gửi request đến JSON Server
+import fetch from "node-fetch"; // npm install node-fetch
 
 dotenv.config();
 
@@ -107,27 +107,6 @@ app.get("/getUser", async (req, res) => {
 app.listen(3001, () => {
   console.log("🚀 Server đang chạy trên cổng 3001");
 });
-
-
-
-// API để lấy thông tin người dùng
-app.get("/getUser", (req, res) => {
-  const { id } = req.query;
-  if (users[id]) {
-    res.json(users[id]);
-  } else {
-    res.status(404).json({ error: "Không tìm thấy người dùng" });
-  }
-});
-
-app.listen(3000, () => {
-  console.log("🚀 Server đang chạy trên cổng 3000");
-});
-
-
-
-
-
 
 
 

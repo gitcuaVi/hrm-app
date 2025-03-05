@@ -18,7 +18,7 @@ const Profile = () => {
       if (storedUser) {
         setUser(JSON.parse(storedUser)); // Lấy từ localStorage nếu có
       } else {
-        fetch(`http://localhost:3000/users?id=${userId}`)
+        fetch(`http://localhost:3000/users/${userId}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error("Không tìm thấy dữ liệu");
