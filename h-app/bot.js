@@ -1,27 +1,41 @@
 
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+
 dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+const app = express();
+app.use(cors()); // Cho phép truy cập từ frontend
+app.use(express.json());
 
 const users = {}; // Lưu thông tin người dùng tạm thời
 
 bot.onText(/\/start/, (msg) => {
     const { id, first_name, last_name, username } = msg.from;
+
     users[id] = {
         id,
         name: `${first_name} ${last_name || ""}`,
         username: username || "Không có username",
     };
 
-    bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+    bot.sendMessage(id, `👋 Xin chào ${first_name}!
+    
+📌 ID Telegram của bạn: ${id}
+🔗 Username: @${username || "Không có"}
+📝 Họ và tên: ${first_name} ${last_name || ""}
+
+Nhấn vào nút bên dưới để mở ứng dụng:`, {
         reply_markup: {
             inline_keyboard: [
                 [
                     {
                         text: "🚀 Mở Mini App",
-                        web_app: { url: `https://hrm-app-fawn.vercel.app/otp?id=${id}` },
+                        web_app: { url: `https://your-web-app.com/?id=${id}` },
                     },
                 ],
             ],
@@ -29,20 +43,19 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 
-console.log("🚀 Bot đang chạy...");
+// API để frontend lấy thông tin user từ bot
+app.get("/getUser", (req, res) => {
+    const { id } = req.query;
+    if (!id || !users[id]) {
+        return res.status(404).json({ error: "Không tìm thấy người dùng" });
+    }
+    res.json(users[id]);
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+});
 
 
 

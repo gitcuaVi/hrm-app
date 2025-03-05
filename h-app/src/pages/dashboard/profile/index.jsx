@@ -4,22 +4,20 @@ import profileImg from "@/assets/profile.jpg";
 
 const Profile = () => {
     const [searchParams] = useSearchParams();
-    const userId = searchParams.get("id"); // Lấy ID từ URL
+    const userId = searchParams.get("id");
+
     const [user, setUser] = useState({
         id: userId || "Không có ID",
-        name: "Chưa có dữ liệu",
-        username: "Chưa có username",
+        name: "Đang tải...",
+        username: "Đang tải...",
     });
 
     useEffect(() => {
         if (userId) {
-            fetch(`https://your-server.com/getUser?id=${userId}`)
+            fetch(`https://your-backend.com/getUser?id=${userId}`)
                 .then((res) => res.json())
-                .then((data) => {
-                    setUser(data);
-                    localStorage.setItem("userData", JSON.stringify(data)); // Lưu user để dùng sau
-                })
-                .catch((error) => console.error("Lỗi khi lấy dữ liệu người dùng:", error));
+                .then((data) => setUser(data))
+                .catch(() => setUser({ id: userId, name: "Không tìm thấy", username: "Không có dữ liệu" }));
         }
     }, [userId]);
 
