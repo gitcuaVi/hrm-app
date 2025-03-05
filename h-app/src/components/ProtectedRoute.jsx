@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const isVerified = localStorage.getItem("isVerified") === "true";
+    const isVerified = sessionStorage.getItem("isVerified") === "true";
   
   return isVerified ? <Outlet /> : <Navigate to="/otp" replace />;
 };
