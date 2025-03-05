@@ -1,61 +1,53 @@
-
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
 
 dotenv.config();
 
+// Khởi tạo bot với chế độ polling (luôn lắng nghe tin nhắn)
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-
-const app = express();
-app.use(cors()); // Cho phép truy cập từ frontend
-app.use(express.json());
-
-const users = {}; // Lưu thông tin người dùng tạm thời
 
 bot.onText(/\/start/, (msg) => {
     const { id, first_name, last_name, username } = msg.from;
+    const fullName = `${first_name} ${last_name || ""}`.trim();
+    const userName = username || "Không có";
 
-    users[id] = {
-        id,
-        name: `${first_name} ${last_name || ""}`,
-        username: username || "Không có username",
-    };
-
+    // Gửi tin nhắn kèm nút mở Mini App
     bot.sendMessage(id, `👋 Xin chào ${first_name}!
-    
-📌 ID Telegram của bạn: ${id}
-🔗 Username: @${username || "Không có"}
-📝 Họ và tên: ${first_name} ${last_name || ""}
+
+📌 *ID Telegram:* \`${id}\`
+🔗 *Username:* @${userName}
+📝 *Họ và tên:* ${fullName}
 
 Nhấn vào nút bên dưới để mở ứng dụng:`, {
+        parse_mode: "Markdown",
         reply_markup: {
             inline_keyboard: [
                 [
                     {
                         text: "🚀 Mở Mini App",
-                        web_app: { url: `https://hrm-app-fawn.vercel.app/?id=${id}` },
-                    },
-                ],
-            ],
-        },
+                        web_app: {
+                            url: `https://hrm-app-fawn.vercel.app/?id=${id}&name=${encodeURIComponent(fullName)}&username=${userName}`
+                        }
+                    }
+                ]
+            ]
+        }
     });
 });
 
-// API để frontend lấy thông tin user từ bot
-app.get("/getUser", (req, res) => {
-    const { id } = req.query;
-    if (!id || !users[id]) {
-        return res.status(404).json({ error: "Không tìm thấy người dùng" });
+// Lắng nghe tin nhắn văn bản (tùy chỉnh nếu cần)
+bot.on("message", (msg) => {
+    if (!msg.text.startsWith("/start")) {
+        bot.sendMessage(msg.chat.id, "🤖 Gõ /start để nhận thông tin Telegram của bạn!");
     }
-    res.json(users[id]);
 });
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-    console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+// Bắt lỗi bot
+bot.on("polling_error", (error) => {
+    console.error("Lỗi polling:", error);
 });
+
+console.log("🚀 Bot Telegram đang chạy...");
 
 
 

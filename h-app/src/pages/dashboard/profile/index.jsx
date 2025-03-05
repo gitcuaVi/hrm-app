@@ -4,22 +4,32 @@ import profileImg from "@/assets/profile.jpg";
 
 const Profile = () => {
     const [searchParams] = useSearchParams();
-    const userId = searchParams.get("id");
-
     const [user, setUser] = useState({
-        id: userId || "Không có ID",
+        id: "Không có ID",
         name: "Đang tải...",
         username: "Đang tải...",
     });
 
     useEffect(() => {
-        if (userId) {
-            fetch(`https://your-backend.com/getUser?id=${userId}`)
-                .then((res) => res.json())
-                .then((data) => setUser(data))
-                .catch(() => setUser({ id: userId, name: "Không tìm thấy", username: "Không có dữ liệu" }));
+        // Lấy thông tin từ URL nếu có
+        const userId = searchParams.get("id");
+        const name = searchParams.get("name");
+        const username = searchParams.get("username");
+
+        if (userId && name && username) {
+            setUser({ id: userId, name, username });
+        } else if (window.Telegram?.WebApp) {
+            // Nếu URL không có dữ liệu, lấy từ Telegram WebApp API
+            const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+            if (tgUser) {
+                setUser({
+                    id: tgUser.id,
+                    name: `${tgUser.first_name} ${tgUser.last_name || ""}`,
+                    username: tgUser.username || "Không có",
+                });
+            }
         }
-    }, [userId]);
+    }, [searchParams]);
 
     return (
         <div className="profile">
