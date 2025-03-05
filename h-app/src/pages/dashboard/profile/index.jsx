@@ -1,31 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom"; // Dùng để lấy query từ URL
 import profileImg from "@/assets/profile.jpg";
 
 const Profile = () => {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("id"); // Lấy ID từ URL
+
   const [user, setUser] = useState({
-    id: "Đang lấy...",
-    name: "Đang lấy...",
-    username: "Đang lấy...",
+    id: userId || "Không có ID",
+    name: "Chưa có dữ liệu",
+    username: "Chưa có username",
   });
 
   useEffect(() => {
-    if (window.Telegram && window.Telegram.WebApp) {
-      const tg = window.Telegram.WebApp;
-      const userData = tg.initDataUnsafe.user;
-
-      console.log("🚀 Dữ liệu nhận được từ Telegram:", userData);
-
-      if (userData) {
-        setUser({
-          id: userData.id || "Không có ID",
-          name: `${userData.first_name} ${userData.last_name || ""}`,
-          username: userData.username || "Không có username",
-        });
-      }
-    } else {
-      console.log("❌ Telegram WebApp SDK chưa hoạt động!");
+    if (userId) {
+      fetch(`https://your-server.com/getUser?id=${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setUser(data);
+        })
+        .catch((error) => console.error("Lỗi khi lấy dữ liệu người dùng:", error));
     }
-  }, []);
+  }, [userId]);
 
   return (
     <div className="profile">
