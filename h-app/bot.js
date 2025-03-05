@@ -1,55 +1,63 @@
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
 
 dotenv.config();
 
-// Khởi tạo bot với chế độ polling (luôn lắng nghe tin nhắn)
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 
-bot.onText(/\/start/, (msg) => {
-    const { id, first_name, last_name, username } = msg.from;
-    const fullName = `${first_name} ${last_name || ""}`.trim();
-    const userName = username || "Không có";
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-    // Gửi tin nhắn kèm nút mở Mini App
-    bot.sendMessage(id, `👋 Xin chào ${first_name}!
+const users = {}; // Lưu thông tin người dùng tạm thời trong RAM
 
-📌 *ID Telegram:* \`${id}\`
-🔗 *Username:* @${userName}
-📝 *Họ và tên:* ${fullName}
-
-Nhấn vào nút bên dưới để mở ứng dụng:`, {
-        parse_mode: "Markdown",
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "🚀 Mở Mini App",
-                        web_app: {
-                            url: `https://hrm-app-fawn.vercel.app/?id=${id}&name=${encodeURIComponent(fullName)}&username=${userName}`
-                        }
-                    }
-                ]
-            ]
-        }
-    });
-});
-
-// Lắng nghe tin nhắn văn bản (tùy chỉnh nếu cần)
 bot.on("message", (msg) => {
-    if (!msg.text.startsWith("/start")) {
-        bot.sendMessage(msg.chat.id, "🤖 Gõ /start để nhận thông tin Telegram của bạn!");
+  const { id, first_name, last_name, username } = msg.from;
+  users[id] = {
+    id,
+    name: `${first_name} ${last_name || ""}`.trim(),
+    username: username || "Không có username",
+  };
+
+  console.log("📩 Người dùng gửi tin nhắn:", users[id]);
+});
+
+bot.onText(/\/start/, (msg) => {
+  const { id } = msg.from;
+
+  bot.sendMessage(
+    id,
+    "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:",
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "🚀 Mở Mini App",
+              web_app: { url: `https://hrm-app-fawn.vercel.app/?id=${id}` },
+            },
+          ],
+        ],
+      },
     }
+  );
 });
 
-// Bắt lỗi bot
-bot.on("polling_error", (error) => {
-    console.error("Lỗi polling:", error);
+// API để lấy thông tin người dùng
+app.get("/getUser", (req, res) => {
+  const { id } = req.query;
+  if (users[id]) {
+    res.json(users[id]);
+  } else {
+    res.status(404).json({ error: "Không tìm thấy người dùng" });
+  }
 });
 
-console.log("🚀 Bot Telegram đang chạy...");
-
-
+app.listen(3000, () => {
+  console.log("🚀 Server đang chạy trên cổng 3000");
+});
 
 
 
