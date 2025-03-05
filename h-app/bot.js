@@ -26,15 +26,13 @@ bot.on("message", (msg) => {
 
 bot.onText(/\/start/, (msg) => {
   const { id, first_name, last_name, username } = msg.from;
-  const name = `${first_name} ${last_name || ""}`.trim();
-  const user = {
+  users[id] = {
     id,
-    name,
+    name: `${first_name} ${last_name || ""}`.trim(),
     username: username || "Không có username",
   };
 
-  // Encode dữ liệu dưới dạng JSON để truyền qua URL
-  const encodedUser = encodeURIComponent(JSON.stringify(user));
+  console.log("📩 Người dùng gửi tin nhắn:", users[id]);
 
   bot.sendMessage(
     id,
@@ -45,7 +43,7 @@ bot.onText(/\/start/, (msg) => {
           [
             {
               text: "🚀 Mở Mini App",
-              web_app: { url: `https://hrm-app-fawn.vercel.app/?user=${encodedUser}` },
+              web_app: { url: `https://hrm-app-fawn.vercel.app/?id=${id}` },
             },
           ],
         ],
@@ -53,6 +51,7 @@ bot.onText(/\/start/, (msg) => {
     }
   );
 });
+
 
 
 // API để lấy thông tin người dùng

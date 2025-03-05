@@ -15,20 +15,23 @@ const Profile = () => {
   useEffect(() => {
     if (userParam) {
       try {
+        console.log("📥 Dữ liệu từ URL trước decode:", userParam);
         const decodedUser = JSON.parse(decodeURIComponent(userParam));
+  
+        console.log("✅ Dữ liệu sau decode:", decodedUser);
         setUser(decodedUser);
         localStorage.setItem("telegramUser", JSON.stringify(decodedUser));
       } catch (error) {
-        console.error("❌ Lỗi khi giải mã dữ liệu người dùng:", error);
+        console.error("❌ Lỗi khi giải mã JSON:", error);
       }
     } else {
-      // Nếu không có trong URL, lấy từ localStorage
       const storedUser = localStorage.getItem("telegramUser");
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
     }
   }, [userParam]);
+  
 
   return (
     <div className="profile">
