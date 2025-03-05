@@ -2,7 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import fetch from "node-fetch"; // npm install node-fetch
+import fetch from "node-fetch";
 
 dotenv.config();
 
@@ -12,16 +12,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const JSON_SERVER_URL = "http://localhost:3000/users";
+const JSON_SERVER_URL = "http://localhost:3002/users";
+
 
 // Hàm lưu thông tin người dùng vào JSON Server
 const saveUserToJsonServer = async (user) => {
   try {
-    // Kiểm tra xem user đã tồn tại chưa
-    const checkResponse = await fetch(`${JSON_SERVER_URL}?id=${user.id}`);
-    const existingUsers = await checkResponse.json();
-
-    if (existingUsers.length > 0) {
+    // Kiểm tra xem user đã tồn tại chưa bằng ID
+    const checkResponse = await fetch(`${JSON_SERVER_URL}/${user.id}`);
+    if (checkResponse.ok) {
       console.log(`🔄 User ${user.id} đã tồn tại`);
       return;
     }
@@ -43,11 +42,11 @@ const saveUserToJsonServer = async (user) => {
   }
 };
 
-// Xử lý khi có tin nhắn từ Telegram
+// Xử lý tin nhắn từ Telegram
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
-    id,
+    id: String(id), // Đảm bảo ID là chuỗi
     name: `${first_name} ${last_name || ""}`.trim(),
     username: username || "Không có username",
   };
@@ -60,7 +59,7 @@ bot.on("message", (msg) => {
 bot.onText(/\/start/, (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
-    id,
+    id: String(id),
     name: `${first_name} ${last_name || ""}`.trim(),
     username: username || "Không có username",
   };
@@ -87,27 +86,25 @@ bot.onText(/\/start/, (msg) => {
 });
 
 // API để lấy thông tin người dùng từ JSON Server
-app.get("/getUser", async (req, res) => {
-  const { id } = req.query;
+app.get("/getUser/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    const response = await fetch(`${JSON_SERVER_URL}?id=${id}`);
-    const users = await response.json();
-
-    if (users.length > 0) {
-      res.json(users[0]);
-    } else {
-      res.status(404).json({ error: "Không tìm thấy người dùng" });
+    const response = await fetch(`${JSON_SERVER_URL}/${id}`);
+    if (!response.ok) {
+      return res.status(404).json({ error: "Không tìm thấy người dùng" });
     }
+
+    const user = await response.json();
+    res.json(user);
   } catch (error) {
     res.status(500).json({ error: "Lỗi server" });
   }
 });
 
-// Khởi chạy server
-app.listen(3001, () => {
-  console.log("🚀 Server đang chạy trên cổng 3001");
+// Khởi chạy server trên cổng 3001
+app.listen(3000, () => {
+  console.log("🚀 Server đang chạy trên cổng 3000");
 });
-
 
 
 
