@@ -8,6 +8,11 @@ const NotificationPage = () => {
       date: "06/03/2025",
       reason: "ssss",
     },
+    {
+      title: "Nghỉ nửa ngày (Buổi sáng)",
+      date: "06/03/2025",
+      reason: "ssss",
+    },
   ];
 
   return (
