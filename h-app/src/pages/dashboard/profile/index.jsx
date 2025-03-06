@@ -51,60 +51,37 @@
 import React, { useState, useEffect } from "react";
 import TelegramWebApp from "@twa-dev/sdk";
 
-const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Profile = () => {
-  const [user, setUser] = useState({
-    id: "Không có ID",
-    name: "Chưa có dữ liệu",
-    username: "Chưa có username",
-  });
-
-  const [messages, setMessages] = useState([]);
+  const [user, setUser] = useState({ id: "", name: "", username: "" });
+  const [botMessage, setBotMessage] = useState("📭 Chưa có tin nhắn từ bot");
 
   useEffect(() => {
     const tg = TelegramWebApp;
     tg.ready();
-  
+
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const { id, first_name, last_name, username } = tg.initDataUnsafe.user;
       const fullName = `${first_name} ${last_name || ""}`.trim();
       setUser({ id, name: fullName, username: username || "Không có username" });
-  
-      // Gọi API lấy tin nhắn của đúng user này
+
+      // Gọi API lấy tin nhắn bot mới nhất
       fetch(`${API_BASE_URL}/messages/${id}`)
         .then((res) => res.json())
-        .then((data) => setMessages(data))
-        .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
+        .then((data) => setBotMessage(data.text || "📭 Chưa có tin nhắn từ bot"))
+        .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn từ bot:", error));
     }
-  
-    // Cập nhật tin nhắn mỗi 3 giây
-    const interval = setInterval(() => {
-      fetch(`${API_BASE_URL}/messages/${id}`)
-        .then((res) => res.json())
-        .then((data) => setMessages(data))
-        .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
-    }, 3000);
-  
-    return () => clearInterval(interval);
   }, []);
-  
 
   return (
     <div className="profile">
-      <h3>💬 Tin nhắn:</h3>
-      <ul className="messages">
-        {messages.length > 0 ? (
-          messages.map((msg, index) => (
-            <li key={index}>
-              <strong>{msg.name}</strong>: {msg.text} <br />
-              <small>{new Date(msg.timestamp).toLocaleString()}</small>
-            </li>
-          ))
-        ) : (
-          <p>📭 Chưa có tin nhắn nào</p>
-        )}
-      </ul>
+      <h3>Thông tin người dùng</h3>
+      <p><strong>Tên:</strong> {user.name}</p>
+      <p><strong>ID:</strong> {user.id}</p>
+      
+      <h3>💬 Tin nhắn từ bot:</h3>
+      <div className="bot-message">{botMessage}</div>
     </div>
   );
 };
