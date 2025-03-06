@@ -41,7 +41,7 @@ const saveUserToBackend = async (user) => {
   } catch (error) {
     console.error("❌ Lỗi kết nối đến API backend:", error);
   }
-};PORT
+};
 
 
 bot.on("message", (msg) => {
