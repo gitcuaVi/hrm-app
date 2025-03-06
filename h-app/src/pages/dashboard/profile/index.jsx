@@ -48,11 +48,10 @@
 // export default Profile;
 
 
-
 import React, { useState, useEffect } from "react";
 import TelegramWebApp from "@twa-dev/sdk";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -60,6 +59,7 @@ const Profile = () => {
     name: "Chưa có dữ liệu",
     username: "Chưa có username",
   });
+
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -72,44 +72,41 @@ const Profile = () => {
 
       setUser({ id, name: fullName, username: username || "Không có username" });
 
-      // Gọi API để lấy tin nhắn của user
-      const fetchMessages = async () => {
-        try {
-          const response = await fetch(`${API_BASE_URL}/messages/${id}`);
-          if (!response.ok) throw new Error("Lỗi khi lấy tin nhắn");
-
-          const data = await response.json();
-          setMessages(data);
-        } catch (error) {
-          console.error("❌ Lỗi khi lấy tin nhắn:", error);
-        }
-      };
-
-      fetchMessages();
-      const interval = setInterval(fetchMessages, 3000); // Lấy tin nhắn mỗi 3s
-
-      return () => clearInterval(interval);
+      // Gọi API để lấy thông tin user từ backend
+      fetch(`${API_BASE_URL}/messages`)
+        .then((res) => res.json())
+        .then((data) => setMessages(data))
+        .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
     }
+
+    // Cập nhật tin nhắn mỗi 3 giây
+    const interval = setInterval(() => {
+      fetch(`${API_BASE_URL}/messages`)
+        .then((res) => res.json())
+        .then((data) => setMessages(data))
+        .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="profile">
-      <h2>Thông tin người dùng</h2>
-      <p><strong>Tên:</strong> {user.name}</p>
-      <p><strong>ID:</strong> {user.id}</p>
-
-      <h3>Tin nhắn:</h3>
-      <div className="messages">
-        {messages.length === 0 ? (
-          <p>Chưa có tin nhắn nào</p>
-        ) : (
-          messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.sender}`}>
-              <strong>{msg.sender === "bot" ? "📩 Bot" : "👤 Bạn"}:</strong> {msg.text}
-            </div>
-          ))
-        )}
+      <h2>📩 Tin nhắn từ Telegram</h2>
+      <div className="user-info">
+        <strong>🆔 ID:</strong> {user.id} <br />
+        <strong>👤 Tên:</strong> {user.name} <br />
+        <strong>📛 Username:</strong> {user.username} <br />
       </div>
+      <h3>💬 Tin nhắn:</h3>
+      <ul className="messages">
+        {messages.map((msg, index) => (
+          <li key={index}>
+            <strong>{msg.name}</strong>: {msg.text} <br />
+            <small>{new Date(msg.timestamp).toLocaleString()}</small>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

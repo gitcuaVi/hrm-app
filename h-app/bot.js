@@ -1,3 +1,4 @@
+
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
@@ -8,72 +9,58 @@ dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const app = express();
+const PORT = process.env.PORT || 5000;
+
 app.use(cors());
 app.use(express.json());
 
-const messages = {}; // Lưu tin nhắn theo user ID
+const messages = []; // Bộ nhớ tạm để lưu tin nhắn
+const API_BASE_URL = process.env.API_BASE_URL;
 
-// 📌 Hàm gửi tin nhắn & lưu lại
-const sendMessageToUser = async (chatId, message) => {
+const saveUserToBackend = async (user) => {
   try {
-    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    if (!API_BASE_URL) {
+      console.error("❌ API_BASE_URL không được thiết lập.");
+      return;
+    }
+
+    const url = `${API_BASE_URL}${user.id}/`;
+    console.log(`📡 Gửi dữ liệu đến API: ${url}`);
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-      }),
+      body: JSON.stringify(user),
     });
 
-    if (!messages[chatId]) messages[chatId] = [];
-    messages[chatId].push({ id: chatId, text: message, sender: "bot" });
-
     if (response.ok) {
-      console.log(`✅ Gửi tin nhắn thành công đến ${chatId}`);
+      console.log(`✅ Đã lưu user ${user.id} vào API backend`);
     } else {
-      console.error("❌ Lỗi khi gửi tin nhắn:", await response.text());
+      console.error("❌ Lỗi khi lưu user:", await response.text());
     }
   } catch (error) {
-    console.error("❌ Lỗi gửi tin nhắn:", error);
+    console.error("❌ Lỗi kết nối đến API backend:", error);
   }
 };
 
-// 📩 Nhận tin nhắn từ người dùng
+// Nhận tin nhắn từ người dùng
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
-  const text = msg.text || "";
+  const text = msg.text || "Không có nội dung";
 
   const userMessage = {
     id: String(id),
+    name: `${first_name} ${last_name || ""}`.trim(),
+    username: username || "Không có username",
     text,
-    sender: "user",
+    timestamp: new Date().toISOString(),
   };
 
-  if (!messages[id]) messages[id] = [];
-  messages[id].push(userMessage);
-
-  console.log("📩 Người dùng gửi tin nhắn:", userMessage);
+  messages.push(userMessage); // Lưu vào bộ nhớ tạm
+  console.log("📩 Tin nhắn mới:", userMessage);
 });
 
-// 📌 API lấy tin nhắn của user
-app.get("/messages/:id", (req, res) => {
-  const userId = req.params.id;
-  res.json(messages[userId] || []);
-});
-
-// 📌 API gửi tin nhắn từ backend đến Telegram
-app.post("/send", async (req, res) => {
-  const { id, message } = req.body;
-  if (!id || !message) return res.status(400).json({ error: "Thiếu dữ liệu" });
-
-  await sendMessageToUser(id, message);
-  res.json({ success: true });
-});
-
-// ✅ Xử lý /start & Gửi nút mở Mini App
+// Gửi tin nhắn khi người dùng nhập `/start`
 bot.onText(/\/start/, (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
@@ -82,31 +69,31 @@ bot.onText(/\/start/, (msg) => {
     username: username || "Không có username",
   };
 
-  console.log("📩 Người dùng nhập /start:", user);
+  saveUserToBackend(user);
 
-  bot.sendMessage(
-    id,
-    "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở Mini App:",
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "🚀 Mở Mini App",
-              web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
-            },
-          ],
+  bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "🚀 Mở Mini App",
+            web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
+          },
         ],
-      },
-    }
-  );
+      ],
+    },
+  });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server đang chạy tại cổng ${PORT}`));
+// API lấy danh sách tin nhắn cho frontend
+app.get("/messages", (req, res) => {
+  res.json(messages);
+});
 
-
-
+// Khởi động server
+app.listen(PORT, () => {
+  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+});
 
 
 
