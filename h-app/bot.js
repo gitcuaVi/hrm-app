@@ -17,12 +17,12 @@ let latestMessage = "Chưa có tin nhắn mới"; // Biến lưu trữ tin nhắ
 
 const saveUserToBackend = async (user) => {
   try {
-    if (!REACT_APP_API_BASE_URL) {
-      console.error("❌ Lỗi: REACT_APP_API_BASE_URL không được thiết lập.");
+    if (!API_BASE_URL) {
+      console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
       return;
     }
 
-    const url = `${REACT_APP_API_BASE_URL}${user.id}/`;
+    const url = `${API_BASE_URL}${user.id}/`;
     console.log(`📡 Gửi dữ liệu đến API: ${url}`);
 
     const response = await fetch(url, {
