@@ -39,9 +39,8 @@ const Profile = () => {
   return (
     <div className="profile">
       <img src={profileImg} alt="Profile" className="profile-img" />
-      <div className="name">Tên: {user.name}</div>
-      <div className="username">Username: {user.username}</div>
-      <div className="user-id">Telegram ID: {user.id}</div>
+      <div className="name">{user.name}</div>
+      <div className="user-id">{user.id}</div>
     </div>
   );
 };
