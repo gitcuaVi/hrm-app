@@ -41,7 +41,7 @@ const saveUserToBackend = async (user) => {
   } catch (error) {
     console.error("❌ Lỗi kết nối đến API backend:", error);
   }
-};
+};PORT
 
 
 bot.on("message", (msg) => {
@@ -82,9 +82,7 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-app.listen(PORT, () => {
   console.log(`🚀 Bot đang chạy`);
-});
 
 
 
