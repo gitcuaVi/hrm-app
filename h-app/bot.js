@@ -1,5 +1,3 @@
-
-
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
@@ -10,79 +8,161 @@ dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const messages = {}; // Lưu tin nhắn theo user ID
 
-const saveUserToBackend = async (user) => {
+// Gửi tin nhắn đến Telegram & lưu tin nhắn
+const sendMessageToUser = async (chatId, message) => {
   try {
-    const API_BASE_URL = process.env.API_BASE_URL;
-    if (!API_BASE_URL) {
-      console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
-      return;
-    }
-
-    const url = `${API_BASE_URL}${user.id}/`;
-    console.log(`📡 Gửi dữ liệu đến API: ${url}`);
+    const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: message,
+      }),
     });
 
+    if (!messages[chatId]) messages[chatId] = [];
+    messages[chatId].push({ id: chatId, text: message, sender: "bot" });
+
     if (response.ok) {
-      console.log(`✅ Đã lưu user ${user.id} vào API backend`);
+      console.log(`✅ Gửi tin nhắn thành công đến ${chatId}`);
     } else {
-      console.error("❌ Lỗi khi lưu user:", await response.text());
+      console.error("❌ Lỗi khi gửi tin nhắn:", await response.text());
     }
   } catch (error) {
-    console.error("❌ Lỗi kết nối đến API backend:", error);
+    console.error("❌ Lỗi gửi tin nhắn:", error);
   }
 };
 
-
+// Nhận tin nhắn từ người dùng
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
-  const user = {
+  const text = msg.text || "";
+
+  const userMessage = {
     id: String(id),
-    name: `${first_name} ${last_name || ""}`.trim(),
-    username: username || "Không có username",
+    text,
+    sender: "user",
   };
 
-  console.log("📩 Người dùng gửi tin nhắn:", user);
-  saveUserToBackend(user);
+  if (!messages[id]) messages[id] = [];
+  messages[id].push(userMessage);
+
+  console.log("📩 Người dùng gửi tin nhắn:", userMessage);
 });
 
-
-bot.onText(/\/start/, (msg) => {
-  const { id, first_name, last_name, username } = msg.from;
-  const user = {
-    id: String(id),
-    name: `${first_name} ${last_name || ""}`.trim(),
-    username: username || "Không có username",
-  };
-
-  console.log("📩 Người dùng gửi tin nhắn:", user);
-  saveUserToBackend(user);
-
-  bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: "🚀 Mở Mini App",
-            web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
-          },
-        ],
-      ],
-    },
-  });
+// API lấy tin nhắn theo user ID
+app.get("/messages/:id", (req, res) => {
+  const userId = req.params.id;
+  res.json(messages[userId] || []);
 });
 
-  console.log(`🚀 Bot đang chạy`);
+// API gửi tin nhắn từ backend đến Telegram
+app.post("/send", async (req, res) => {
+  const { id, message } = req.body;
+  if (!id || !message) return res.status(400).json({ error: "Thiếu dữ liệu" });
+
+  await sendMessageToUser(id, message);
+  res.json({ success: true });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server chạy tại cổng ${PORT}`));
+
+
+
+
+
+// import TelegramBot from "node-telegram-bot-api";
+// import dotenv from "dotenv";
+// import express from "express";
+// import cors from "cors";
+// import fetch from "node-fetch";
+
+// dotenv.config();
+
+// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+// const app = express();
+
+// app.use(cors());
+// app.use(express.json());
+
+// const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+// const saveUserToBackend = async (user) => {
+//   try {
+//     const API_BASE_URL = process.env.API_BASE_URL;
+//     if (!API_BASE_URL) {
+//       console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
+//       return;
+//     }
+
+//     const url = `${API_BASE_URL}${user.id}/`;
+//     console.log(`📡 Gửi dữ liệu đến API: ${url}`);
+
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(user),
+//     });
+
+//     if (response.ok) {
+//       console.log(`✅ Đã lưu user ${user.id} vào API backend`);
+//     } else {
+//       console.error("❌ Lỗi khi lưu user:", await response.text());
+//     }
+//   } catch (error) {
+//     console.error("❌ Lỗi kết nối đến API backend:", error);
+//   }
+// };
+
+
+// bot.on("message", (msg) => {
+//   const { id, first_name, last_name, username } = msg.from;
+//   const user = {
+//     id: String(id),
+//     name: `${first_name} ${last_name || ""}`.trim(),
+//     username: username || "Không có username",
+//   };
+
+//   console.log("📩 Người dùng gửi tin nhắn:", user);
+//   saveUserToBackend(user);
+// });
+
+
+// bot.onText(/\/start/, (msg) => {
+//   const { id, first_name, last_name, username } = msg.from;
+//   const user = {
+//     id: String(id),
+//     name: `${first_name} ${last_name || ""}`.trim(),
+//     username: username || "Không có username",
+//   };
+
+//   console.log("📩 Người dùng gửi tin nhắn:", user);
+//   saveUserToBackend(user);
+
+//   bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+//     reply_markup: {
+//       inline_keyboard: [
+//         [
+//           {
+//             text: "🚀 Mở Mini App",
+//             web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
+//           },
+//         ],
+//       ],
+//     },
+//   });
+// });
+
+//   console.log(`🚀 Bot đang chạy`);
 
 
 
