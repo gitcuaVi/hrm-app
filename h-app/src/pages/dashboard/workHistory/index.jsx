@@ -13,7 +13,7 @@ const WorkHistory = () => {
     // Giả lập độ trễ API (giống như đang fetch dữ liệu)
     setTimeout(() => {
       setWorkHistory(fakeData);
-    }, 1000);
+    }, 0);
   }, []);
 
   return (

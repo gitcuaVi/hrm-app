@@ -8,6 +8,7 @@ const Footer = () => {
   const location = useLocation();
   
   const isDashboard = location.pathname === "/dashboard";
+  const isNotif = location.pathname === "/thong-bao";
 
   return (
     <div className="footer">
@@ -17,6 +18,7 @@ const Footer = () => {
         onClick={() => navigate("/dashboard")} 
       />
       <GoBell className="icon"
+       style={{ color: isNotif ? "#2563eb" : "black" }} 
        onClick={() => navigate("/thong-bao")}
       />
     </div>
