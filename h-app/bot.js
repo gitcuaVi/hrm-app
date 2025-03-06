@@ -1,42 +1,75 @@
+
+
+
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
-import { Server } from "socket.io";
-import http from "http";
 
 dotenv.config();
 
-// Khởi tạo bot Telegram
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-
-// Khởi tạo server Express và WebSocket
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(cors());
 app.use(express.json());
 
-const latestMessages = {}; // Lưu tin nhắn bot gửi
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-// 📨 Hàm gửi tin nhắn & phát sự kiện WebSocket
-const sendBotMessage = (userId, text) => {
-  latestMessages[userId] = text; // Lưu tin nhắn mới nhất cho user
-  io.emit(`message:${userId}`, text); // Gửi sự kiện WebSocket
-  bot.sendMessage(userId, text);
+const saveUserToBackend = async (user) => {
+  try {
+    const API_BASE_URL = process.env.API_BASE_URL;
+    if (!API_BASE_URL) {
+      console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
+      return;
+    }
+
+    const url = `${API_BASE_URL}${user.id}/`;
+    console.log(`📡 Gửi dữ liệu đến API: ${url}`);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    });
+
+    if (response.ok) {
+      console.log(`✅ Đã lưu user ${user.id} vào API backend`);
+    } else {
+      console.error("❌ Lỗi khi lưu user:", await response.text());
+    }
+  } catch (error) {
+    console.error("❌ Lỗi kết nối đến API backend:", error);
+  }
 };
 
-// 🎯 Lệnh `/start`
+
+bot.on("message", (msg) => {
+  const { id, first_name, last_name, username } = msg.from;
+  const user = {
+    id: String(id),
+    name: `${first_name} ${last_name || ""}`.trim(),
+    username: username || "Không có username",
+  };
+
+  console.log("📩 Người dùng gửi tin nhắn:", user);
+  saveUserToBackend(user);
+});
+
+
 bot.onText(/\/start/, (msg) => {
-  const { id } = msg.chat;
-  const welcomeMessage = "👋 Chào mừng bạn! Đây là tin nhắn từ bot.";
+  const { id, first_name, last_name, username } = msg.from;
+  const user = {
+    id: String(id),
+    name: `${first_name} ${last_name || ""}`.trim(),
+    username: username || "Không có username",
+  };
 
-  console.log(`📩 Gửi tin nhắn đến user ${id}:`, welcomeMessage);
-  sendBotMessage(id, welcomeMessage);
+  console.log("📩 Người dùng gửi tin nhắn:", user);
+  saveUserToBackend(user);
 
-  bot.sendMessage(id, "👋 Nhấn vào nút bên dưới để mở ứng dụng:", {
+  bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
     reply_markup: {
       inline_keyboard: [
         [
@@ -50,124 +83,7 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// 📥 API lấy tin nhắn bot gần nhất
-app.get("/latest-message/:userId", (req, res) => {
-  const userId = req.params.userId;
-  res.json({ text: latestMessages[userId] || "📭 Chưa có tin nhắn từ bot" });
-});
-
-// 📡 API lấy tin nhắn từ Telegram (`getUpdates`)
-app.get("/fetch-messages", async (req, res) => {
-  try {
-    const response = await fetch(
-      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getUpdates`
-    );
-    const data = await response.json();
-    console.log("📩 Tin nhắn từ getUpdates:", data);
-
-    res.json(data);
-  } catch (error) {
-    console.error("❌ Lỗi khi lấy tin nhắn:", error);
-    res.status(500).json({ error: "Lỗi server" });
-  }
-});
-
-// 🌐 WebSocket connection
-io.on("connection", (socket) => {
-  console.log("🔥 WebSocket connected:", socket.id);
-});
-
-// 🚀 Khởi động server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
-});
-
-
-
-// import TelegramBot from "node-telegram-bot-api";
-// import dotenv from "dotenv";
-// import express from "express";
-// import cors from "cors";
-// import fetch from "node-fetch";
-
-// dotenv.config();
-
-// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-// const app = express();
-
-// app.use(cors());
-// app.use(express.json());
-
-// const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-// const saveUserToBackend = async (user) => {
-//   try {
-//     const API_BASE_URL = process.env.API_BASE_URL;
-//     if (!API_BASE_URL) {
-//       console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
-//       return;
-//     }
-
-//     const url = `${API_BASE_URL}${user.id}/`;
-//     console.log(`📡 Gửi dữ liệu đến API: ${url}`);
-
-//     const response = await fetch(url, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(user),
-//     });
-
-//     if (response.ok) {
-//       console.log(`✅ Đã lưu user ${user.id} vào API backend`);
-//     } else {
-//       console.error("❌ Lỗi khi lưu user:", await response.text());
-//     }
-//   } catch (error) {
-//     console.error("❌ Lỗi kết nối đến API backend:", error);
-//   }
-// };
-
-
-// bot.on("message", (msg) => {
-//   const { id, first_name, last_name, username } = msg.from;
-//   const user = {
-//     id: String(id),
-//     name: `${first_name} ${last_name || ""}`.trim(),
-//     username: username || "Không có username",
-//   };
-
-//   console.log("📩 Người dùng gửi tin nhắn:", user);
-//   saveUserToBackend(user);
-// });
-
-
-// bot.onText(/\/start/, (msg) => {
-//   const { id, first_name, last_name, username } = msg.from;
-//   const user = {
-//     id: String(id),
-//     name: `${first_name} ${last_name || ""}`.trim(),
-//     username: username || "Không có username",
-//   };
-
-//   console.log("📩 Người dùng gửi tin nhắn:", user);
-//   saveUserToBackend(user);
-
-//   bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
-//     reply_markup: {
-//       inline_keyboard: [
-//         [
-//           {
-//             text: "🚀 Mở Mini App",
-//             web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
-//           },
-//         ],
-//       ],
-//     },
-//   });
-// });
-
-//   console.log(`🚀 Bot đang chạy`);
+  console.log(`🚀 Bot đang chạy`);
 
 
 
