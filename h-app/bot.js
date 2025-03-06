@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import fs from "fs";
 import fetch from "node-fetch";
 
 dotenv.config();
@@ -13,8 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const messagesFile = "messages.json";
 
-// Hàm lưu user vào backend
+// 🛠 Hàm lưu user vào backend
 const saveUserToBackend = async (user) => {
   try {
     if (!API_BASE_URL) {
@@ -22,7 +24,7 @@ const saveUserToBackend = async (user) => {
       return;
     }
 
-    const url = `${API_BASE_URL}${user.id}/`;
+    const url = `${API_BASE_URL}/save-user`;
     console.log(`📡 Gửi dữ liệu đến API: ${url}`);
 
     const response = await fetch(url, {
@@ -41,7 +43,22 @@ const saveUserToBackend = async (user) => {
   }
 };
 
-// Xử lý khi user gửi tin nhắn
+// 🛠 Hàm lưu tin nhắn vào file messages.json
+const saveMessage = (chat_id, message) => {
+  let messages = {};
+  if (fs.existsSync(messagesFile)) {
+    messages = JSON.parse(fs.readFileSync(messagesFile, "utf8"));
+  }
+
+  if (!messages[chat_id]) {
+    messages[chat_id] = [];
+  }
+
+  messages[chat_id].push(message);
+  fs.writeFileSync(messagesFile, JSON.stringify(messages, null, 2));
+};
+
+// 📨 Xử lý khi user gửi tin nhắn
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
@@ -52,9 +69,10 @@ bot.on("message", (msg) => {
 
   console.log("📩 Người dùng gửi tin nhắn:", user);
   saveUserToBackend(user);
+  saveMessage(id, msg.text);
 });
 
-// Xử lý lệnh /start
+// 🛠 Xử lý lệnh /start
 bot.onText(/\/start/, (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
@@ -80,7 +98,7 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// Endpoint để gửi thông báo từ backend đến user qua Telegram bot
+// 📨 API gửi thông báo đến user
 app.post("/send-notification", async (req, res) => {
   try {
     const { chat_id, message } = req.body;
@@ -91,6 +109,7 @@ app.post("/send-notification", async (req, res) => {
 
     await bot.sendMessage(chat_id, message);
     console.log(`📩 Đã gửi tin nhắn đến ${chat_id}: ${message}`);
+    saveMessage(chat_id, message);
 
     res.json({ success: true, message: "Tin nhắn đã được gửi" });
   } catch (error) {
@@ -99,6 +118,19 @@ app.post("/send-notification", async (req, res) => {
   }
 });
 
+// 📨 API lấy tin nhắn đã gửi
+app.get("/get-messages/:chat_id", (req, res) => {
+  const { chat_id } = req.params;
+
+  if (!fs.existsSync(messagesFile)) {
+    return res.json({ messages: [] });
+  }
+
+  const messages = JSON.parse(fs.readFileSync(messagesFile, "utf8"));
+  res.json({ messages: messages[chat_id] || [] });
+});
+
+// 🚀 Chạy server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server đang chạy trên cổng ${PORT}`);

@@ -94,7 +94,7 @@ const Profile = () => {
     username: "Chưa có username",
   });
 
-  const [messages, setMessages] = useState([]); // State để lưu tin nhắn
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const tg = TelegramWebApp;
@@ -112,7 +112,8 @@ const Profile = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
-      }).then((res) => res.json())
+      })
+        .then((res) => res.json())
         .then((data) => console.log("✅ Đã lưu user:", data))
         .catch((error) => console.error("❌ Lỗi khi gửi user:", error));
 
@@ -151,3 +152,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
