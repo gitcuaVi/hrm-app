@@ -47,43 +47,26 @@
 
 // export default Profile;
 
+import { useState, useEffect } from "react";
 
-import React, { useState, useEffect } from "react";
-import TelegramWebApp from "@twa-dev/sdk";
+const userId = "7117817382"; // ID Telegram của user
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-const Profile = () => {
-  const [user, setUser] = useState({ id: "", name: "", username: "" });
-  const [botMessage, setBotMessage] = useState("📭 Chưa có tin nhắn từ bot");
+const BotMessage = () => {
+  const [botMessage, setBotMessage] = useState("📭 Đang tải tin nhắn...");
 
   useEffect(() => {
-    const tg = TelegramWebApp;
-    tg.ready();
-
-    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const { id, first_name, last_name, username } = tg.initDataUnsafe.user;
-      const fullName = `${first_name} ${last_name || ""}`.trim();
-      setUser({ id, name: fullName, username: username || "Không có username" });
-
-      // Gọi API lấy tin nhắn bot mới nhất
-      fetch(`${API_BASE_URL}/messages/${id}`)
-        .then((res) => res.json())
-        .then((data) => setBotMessage(data.text || "📭 Chưa có tin nhắn từ bot"))
-        .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn từ bot:", error));
-    }
+    fetch(`http://localhost:5000/latest-message/${userId}`)
+      .then((res) => res.json())
+      .then((data) => setBotMessage(data.text))
+      .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
   }, []);
 
   return (
-    <div className="profile">
-      <h3>Thông tin người dùng</h3>
-      <p><strong>Tên:</strong> {user.name}</p>
-      <p><strong>ID:</strong> {user.id}</p>
-      
-      <h3>💬 Tin nhắn từ bot:</h3>
-      <div className="bot-message">{botMessage}</div>
+    <div>
+      <h3>📩 Tin nhắn từ bot:</h3>
+      <p>{botMessage}</p>
     </div>
   );
 };
 
-export default Profile;
+export default BotMessage;
