@@ -2,49 +2,52 @@ import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import { Server } from "socket.io";
+import http from "http";
 
 dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, { cors: { origin: "*" } });
 
 app.use(cors());
 app.use(express.json());
 
 const latestMessages = {}; // Lưu tin nhắn bot gửi
 
+// Hàm gửi tin nhắn & phát sự kiện WebSocket
 const sendBotMessage = (userId, text) => {
-  latestMessages[userId] = text; // Lưu lại tin nhắn bot gửi gần nhất
+  latestMessages[userId] = text;
+  io.emit(`message:${userId}`, text); // Gửi sự kiện WebSocket
   bot.sendMessage(userId, text);
 };
 
-// Khi user nhập /start, bot gửi tin nhắn và lưu lại
 bot.onText(/\/start/, (msg) => {
   const { id } = msg.from;
-  const text = "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:";
+  const text = "👋 Chào mừng bạn! Đây là tin nhắn từ bot.";
 
   console.log(`📩 Gửi tin nhắn đến user ${id}:`, text);
   sendBotMessage(id, text);
-
-  bot.sendMessage(id, "🚀 Mở Mini App", {
-    reply_markup: {
-      inline_keyboard: [[{ text: "🚀 Mở Mini App", web_app: { url: "https://hrm-app-fawn.vercel.app/" } }]],
-    },
-  });
 });
 
-// API lấy tin nhắn bot gửi gần nhất
+// API lấy tin nhắn bot gần nhất
 app.get("/latest-message/:userId", (req, res) => {
   const userId = req.params.userId;
   res.json({ text: latestMessages[userId] || "📭 Chưa có tin nhắn từ bot" });
 });
 
-// Khởi động server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
+// WebSocket connection
+io.on("connection", (socket) => {
+  console.log("🔥 WebSocket connected:", socket.id);
 });
 
+// Khởi động server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`🚀 Server chạy tại http://localhost:${PORT}`);
+});
 
 
 

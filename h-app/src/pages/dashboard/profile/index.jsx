@@ -48,17 +48,29 @@
 // export default Profile;
 
 import { useState, useEffect } from "react";
+import { io } from "socket.io-client";
 
 const userId = "7117817382"; // ID Telegram của user
+const socket = io("http://localhost:5000"); // Kết nối WebSocket
 
 const BotMessage = () => {
   const [botMessage, setBotMessage] = useState("📭 Đang tải tin nhắn...");
 
   useEffect(() => {
+    // Lấy tin nhắn lần đầu
     fetch(`http://localhost:5000/latest-message/${userId}`)
       .then((res) => res.json())
       .then((data) => setBotMessage(data.text))
       .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
+
+    // Lắng nghe sự kiện WebSocket
+    socket.on(`message:${userId}`, (newMessage) => {
+      setBotMessage(newMessage);
+    });
+
+    return () => {
+      socket.off(`message:${userId}`);
+    };
   }, []);
 
   return (
@@ -70,3 +82,4 @@ const BotMessage = () => {
 };
 
 export default BotMessage;
+
