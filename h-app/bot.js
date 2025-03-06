@@ -23,6 +23,8 @@ const latestMessages = {}; // Lưu tin nhắn bot gửi
 // Hàm gửi tin nhắn & phát sự kiện WebSocket
 const sendBotMessage = (userId, text) => {
   latestMessages[userId] = text; // Lưu tin nhắn mới nhất cho user
+  console.log(`📩 Tin nhắn bot gửi:`, { userId, text });
+
   io.emit(`message:${userId}`, text); // Gửi sự kiện WebSocket
   bot.sendMessage(userId, text);
 };
@@ -32,7 +34,6 @@ bot.onText(/\/start/, (msg) => {
   const { id } = msg.from;
 
   const welcomeMessage = "👋 Chào mừng bạn! Đây là tin nhắn từ bot.";
-  console.log(`📩 Gửi tin nhắn đến user ${id}:`, welcomeMessage);
   sendBotMessage(id, welcomeMessage);
 
   // Gửi thêm nút mở Mini App
@@ -59,6 +60,10 @@ app.get("/latest-message/:userId", (req, res) => {
 // WebSocket connection
 io.on("connection", (socket) => {
   console.log("🔥 WebSocket connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("❌ WebSocket disconnected:", socket.id);
+  });
 });
 
 // Khởi động server
@@ -66,6 +71,7 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });
+
 
 
 

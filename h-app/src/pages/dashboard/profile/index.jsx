@@ -57,21 +57,25 @@ const BotMessage = () => {
   const [botMessage, setBotMessage] = useState("📭 Đang tải tin nhắn...");
 
   useEffect(() => {
-    // Lấy tin nhắn lần đầu
+    // Lấy tin nhắn lần đầu từ API
     fetch(`http://localhost:5000/latest-message/${userId}`)
       .then((res) => res.json())
-      .then((data) => setBotMessage(data.text))
+      .then((data) => {
+        console.log("✅ Tin nhắn từ API:", data.text);
+        setBotMessage(data.text);
+      })
       .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
 
     // Lắng nghe sự kiện WebSocket
     socket.on(`message:${userId}`, (newMessage) => {
+      console.log("🔥 Tin nhắn mới từ WebSocket:", newMessage);
       setBotMessage(newMessage);
     });
 
     return () => {
       socket.off(`message:${userId}`);
     };
-  }, []);
+  }, [userId]); // Dependency array để cập nhật khi userId thay đổi
 
   return (
     <div>
@@ -82,4 +86,3 @@ const BotMessage = () => {
 };
 
 export default BotMessage;
-
