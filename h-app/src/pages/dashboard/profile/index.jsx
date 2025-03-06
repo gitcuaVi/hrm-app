@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import TelegramWebApp from "@twa-dev/sdk";
 import profileImg from "@/assets/profile.jpg";
 
-const Profile = () => {
-  const [searchParams] = useSearchParams();
-  const userId = searchParams.get("id");
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
+const Profile = () => {
   const [user, setUser] = useState({
     id: "Không có ID",
     name: "Chưa có dữ liệu",
@@ -13,12 +12,17 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (userId) {
-      const storedUser = localStorage.getItem(`user_${userId}`);
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        fetch(`http://localhost:3000/users/${userId}`)
+    const tg = TelegramWebApp;
+    tg.ready();
+
+    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      const { id, first_name, last_name, username } = tg.initDataUnsafe.user;
+      const fullName = `${first_name} ${last_name || ""}`.trim();
+
+      setUser({ id, name: fullName, username: username || "Không có username" });
+
+      // Gọi API để lấy thông tin từ backend
+      fetch(`${API_BASE_URL}${id}`)
         .then((res) => {
           if (!res.ok) {
             throw new Error("Không tìm thấy dữ liệu");
@@ -26,17 +30,11 @@ const Profile = () => {
           return res.json();
         })
         .then((data) => {
-          if (data.length > 0) {
-            setUser(data[0]);
-            localStorage.setItem(`user_${userId}`, JSON.stringify(data[0]));
-          } else {
-            console.error("❌ Không tìm thấy người dùng");
-          }
+          setUser((prev) => ({ ...prev, ...data }));
         })
-        .catch((error) => console.error("❌ Lỗi khi lấy dữ liệu:", error));      
-      }
+        .catch((error) => console.error("❌ Lỗi khi lấy dữ liệu:", error));
     }
-  }, [userId]);
+  }, []);
 
   return (
     <div className="profile">

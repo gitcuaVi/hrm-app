@@ -1,3 +1,5 @@
+
+
 import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
@@ -7,38 +9,30 @@ import fetch from "node-fetch";
 dotenv.config();
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-const JSON_SERVER_URL = "http://localhost:3002/users";
+const API_BASE_URL = process.env.API_BASE_URL;
+const PORT = process.env.PORT || 3000;
 
-
-// Hàm lưu thông tin người dùng vào JSON Server
-const saveUserToJsonServer = async (user) => {
+// Hàm lưu thông tin người dùng vào API backend
+const saveUserToBackend = async (user) => {
   try {
-    // Kiểm tra xem user đã tồn tại chưa bằng ID
-    const checkResponse = await fetch(`${JSON_SERVER_URL}/${user.id}`);
-    if (checkResponse.ok) {
-      console.log(`🔄 User ${user.id} đã tồn tại`);
-      return;
-    }
-
-    // Nếu chưa có, thêm user vào db.json
-    const response = await fetch(`${JSON_SERVER_URL}`, {
+    const response = await fetch(`${API_BASE_URL}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
     });
 
     if (response.ok) {
-      console.log(`✅ Đã lưu user ${user.id} vào db.json`);
+      console.log(`✅ Đã lưu user ${user.id} vào backend`);
     } else {
       console.error("❌ Lỗi khi lưu user:", await response.text());
     }
   } catch (error) {
-    console.error("❌ Lỗi khi kết nối đến JSON Server:", error);
+    console.error("❌ Lỗi kết nối đến API backend:", error);
   }
 };
 
@@ -46,13 +40,13 @@ const saveUserToJsonServer = async (user) => {
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
-    id: String(id), // Đảm bảo ID là chuỗi
+    id: String(id),
     name: `${first_name} ${last_name || ""}`.trim(),
     username: username || "Không có username",
   };
 
   console.log("📩 Người dùng gửi tin nhắn:", user);
-  saveUserToJsonServer(user);
+  saveUserToBackend(user);
 });
 
 // Xử lý lệnh /start
@@ -65,46 +59,136 @@ bot.onText(/\/start/, (msg) => {
   };
 
   console.log("📩 Người dùng gửi tin nhắn:", user);
-  saveUserToJsonServer(user);
+  saveUserToBackend(user);
 
-  bot.sendMessage(
-    id,
-    "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:",
-    {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "🚀 Mở Mini App",
-              web_app: { url: `https://hrm-app-fawn.vercel.app/?id=${id}` },
-            },
-          ],
+  bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "🚀 Mở Mini App",
+            web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
+          },
         ],
-      },
-    }
-  );
+      ],
+    },
+  });
 });
 
-// API để lấy thông tin người dùng từ JSON Server
-app.get("/getUser/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const response = await fetch(`${JSON_SERVER_URL}/${id}`);
-    if (!response.ok) {
-      return res.status(404).json({ error: "Không tìm thấy người dùng" });
-    }
-
-    const user = await response.json();
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ error: "Lỗi server" });
-  }
+// Khởi chạy server
+app.listen(PORT, () => {
+  console.log(`🚀 Bot đang chạy trên cổng ${PORT}`);
 });
 
-// Khởi chạy server trên cổng 3001
-app.listen(3000, () => {
-  console.log("🚀 Bot đang chạy");
-});
+
+
+// import TelegramBot from "node-telegram-bot-api";
+// import dotenv from "dotenv";
+// import express from "express";
+// import cors from "cors";
+// import fetch from "node-fetch";
+
+// dotenv.config();
+
+// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+// const app = express();
+// app.use(cors());
+// app.use(express.json());
+
+// const JSON_SERVER_URL = "http://localhost:3002/users";
+
+
+// // Hàm lưu thông tin người dùng vào JSON Server
+// const saveUserToJsonServer = async (user) => {
+//   try {
+//     // Kiểm tra xem user đã tồn tại chưa bằng ID
+//     const checkResponse = await fetch(`${JSON_SERVER_URL}/${user.id}`);
+//     if (checkResponse.ok) {
+//       console.log(`🔄 User ${user.id} đã tồn tại`);
+//       return;
+//     }
+
+//     // Nếu chưa có, thêm user vào db.json
+//     const response = await fetch(`${JSON_SERVER_URL}`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(user),
+//     });
+
+//     if (response.ok) {
+//       console.log(`✅ Đã lưu user ${user.id} vào db.json`);
+//     } else {
+//       console.error("❌ Lỗi khi lưu user:", await response.text());
+//     }
+//   } catch (error) {
+//     console.error("❌ Lỗi khi kết nối đến JSON Server:", error);
+//   }
+// };
+
+// // Xử lý tin nhắn từ Telegram
+// bot.on("message", (msg) => {
+//   const { id, first_name, last_name, username } = msg.from;
+//   const user = {
+//     id: String(id), // Đảm bảo ID là chuỗi
+//     name: `${first_name} ${last_name || ""}`.trim(),
+//     username: username || "Không có username",
+//   };
+
+//   console.log("📩 Người dùng gửi tin nhắn:", user);
+//   saveUserToJsonServer(user);
+// });
+
+// // Xử lý lệnh /start
+// bot.onText(/\/start/, (msg) => {
+//   const { id, first_name, last_name, username } = msg.from;
+//   const user = {
+//     id: String(id),
+//     name: `${first_name} ${last_name || ""}`.trim(),
+//     username: username || "Không có username",
+//   };
+
+//   console.log("📩 Người dùng gửi tin nhắn:", user);
+//   saveUserToJsonServer(user);
+
+//   bot.sendMessage(
+//     id,
+//     "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:",
+//     {
+//       reply_markup: {
+//         inline_keyboard: [
+//           [
+//             {
+//               text: "🚀 Mở Mini App",
+//               web_app: { url: `https://hrm-app-fawn.vercel.app/?id=${id}` },
+//             },
+//           ],
+//         ],
+//       },
+//     }
+//   );
+// });
+
+// // API để lấy thông tin người dùng từ JSON Server
+// app.get("/getUser/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const response = await fetch(`${JSON_SERVER_URL}/${id}`);
+//     if (!response.ok) {
+//       return res.status(404).json({ error: "Không tìm thấy người dùng" });
+//     }
+
+//     const user = await response.json();
+//     res.json(user);
+//   } catch (error) {
+//     res.status(500).json({ error: "Lỗi server" });
+//   }
+// });
+
+// // Khởi chạy server trên cổng 3001
+// app.listen(3000, () => {
+//   console.log("🚀 Bot đang chạy");
+// });
 
 
 
