@@ -17,7 +17,6 @@ app.use(express.json());
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const PORT = process.env.PORT || 3000;
 
-// Hàm lưu thông tin người dùng vào API backend
 const saveUserToBackend = async (user) => {
   try {
     const API_BASE_URL = process.env.API_BASE_URL;
@@ -46,7 +45,6 @@ const saveUserToBackend = async (user) => {
 };
 
 
-// Xử lý tin nhắn từ Telegram
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
@@ -59,7 +57,7 @@ bot.on("message", (msg) => {
   saveUserToBackend(user);
 });
 
-// Xử lý lệnh /start
+
 bot.onText(/\/start/, (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const user = {
@@ -85,7 +83,6 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// Khởi chạy server
 app.listen(PORT, () => {
   console.log(`🚀 Bot đang chạy trên cổng ${PORT}`);
 });
