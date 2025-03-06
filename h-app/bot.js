@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import fetch from "node-fetch";
 import { Server } from "socket.io";
 import http from "http";
 
@@ -20,23 +21,21 @@ app.use(express.json());
 
 const latestMessages = {}; // Lưu tin nhắn bot gửi
 
-// Hàm gửi tin nhắn & phát sự kiện WebSocket
+// 📨 Hàm gửi tin nhắn & phát sự kiện WebSocket
 const sendBotMessage = (userId, text) => {
   latestMessages[userId] = text; // Lưu tin nhắn mới nhất cho user
-  console.log(`📩 Tin nhắn bot gửi:`, { userId, text });
-
   io.emit(`message:${userId}`, text); // Gửi sự kiện WebSocket
   bot.sendMessage(userId, text);
 };
 
-// Xử lý lệnh `/start`
+// 🎯 Lệnh `/start`
 bot.onText(/\/start/, (msg) => {
-  const { id } = msg.from;
-
+  const { id } = msg.chat;
   const welcomeMessage = "👋 Chào mừng bạn! Đây là tin nhắn từ bot.";
+
+  console.log(`📩 Gửi tin nhắn đến user ${id}:`, welcomeMessage);
   sendBotMessage(id, welcomeMessage);
 
-  // Gửi thêm nút mở Mini App
   bot.sendMessage(id, "👋 Nhấn vào nút bên dưới để mở ứng dụng:", {
     reply_markup: {
       inline_keyboard: [
@@ -51,27 +50,38 @@ bot.onText(/\/start/, (msg) => {
   });
 });
 
-// API lấy tin nhắn bot gần nhất
+// 📥 API lấy tin nhắn bot gần nhất
 app.get("/latest-message/:userId", (req, res) => {
   const userId = req.params.userId;
   res.json({ text: latestMessages[userId] || "📭 Chưa có tin nhắn từ bot" });
 });
 
-// WebSocket connection
-io.on("connection", (socket) => {
-  console.log("🔥 WebSocket connected:", socket.id);
+// 📡 API lấy tin nhắn từ Telegram (`getUpdates`)
+app.get("/fetch-messages", async (req, res) => {
+  try {
+    const response = await fetch(
+      `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/getUpdates`
+    );
+    const data = await response.json();
+    console.log("📩 Tin nhắn từ getUpdates:", data);
 
-  socket.on("disconnect", () => {
-    console.log("❌ WebSocket disconnected:", socket.id);
-  });
+    res.json(data);
+  } catch (error) {
+    console.error("❌ Lỗi khi lấy tin nhắn:", error);
+    res.status(500).json({ error: "Lỗi server" });
+  }
 });
 
-// Khởi động server
+// 🌐 WebSocket connection
+io.on("connection", (socket) => {
+  console.log("🔥 WebSocket connected:", socket.id);
+});
+
+// 🚀 Khởi động server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });
-
 
 
 

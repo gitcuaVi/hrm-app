@@ -50,32 +50,28 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 
-const userId = "7117817382"; // ID Telegram của user
+const userId = "7117817382"; // Thay bằng ID Telegram của bạn
 const socket = io("http://localhost:5000"); // Kết nối WebSocket
 
 const BotMessage = () => {
   const [botMessage, setBotMessage] = useState("📭 Đang tải tin nhắn...");
 
   useEffect(() => {
-    // Lấy tin nhắn lần đầu từ API
+    // 🔄 Lấy tin nhắn lần đầu từ API
     fetch(`http://localhost:5000/latest-message/${userId}`)
       .then((res) => res.json())
-      .then((data) => {
-        console.log("✅ Tin nhắn từ API:", data.text);
-        setBotMessage(data.text);
-      })
+      .then((data) => setBotMessage(data.text))
       .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
 
-    // Lắng nghe sự kiện WebSocket
+    // 📡 Lắng nghe sự kiện WebSocket
     socket.on(`message:${userId}`, (newMessage) => {
-      console.log("🔥 Tin nhắn mới từ WebSocket:", newMessage);
       setBotMessage(newMessage);
     });
 
     return () => {
       socket.off(`message:${userId}`);
     };
-  }, [userId]); // Dependency array để cập nhật khi userId thay đổi
+  }, []);
 
   return (
     <div>
