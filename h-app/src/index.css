@@ -194,7 +194,7 @@ body {
   .day {
     font-size: 12px;
     padding: 6px;
-    min-width: 40px;
+    min-width: 43px;
     cursor: pointer;
   }
 }

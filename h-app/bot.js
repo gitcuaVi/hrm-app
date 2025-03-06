@@ -103,7 +103,7 @@ app.get("/getUser/:id", async (req, res) => {
 
 // Khởi chạy server trên cổng 3001
 app.listen(3000, () => {
-  console.log("🚀 Server đang chạy trên cổng 3000");
+  console.log("🚀 Bot đang chạy");
 });
 
 
