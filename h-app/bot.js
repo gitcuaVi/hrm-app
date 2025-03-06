@@ -12,17 +12,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_BASE_URL = process.env.API_BASE_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 let latestMessage = "Chưa có tin nhắn mới"; // Biến lưu trữ tin nhắn mới nhất
 
 const saveUserToBackend = async (user) => {
   try {
-    if (!API_BASE_URL) {
-      console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
+    if (!REACT_APP_API_BASE_URL) {
+      console.error("❌ Lỗi: REACT_APP_API_BASE_URL không được thiết lập.");
       return;
     }
 
-    const url = `${API_BASE_URL}${user.id}/`;
+    const url = `${REACT_APP_API_BASE_URL}${user.id}/`;
     console.log(`📡 Gửi dữ liệu đến API: ${url}`);
 
     const response = await fetch(url, {
