@@ -85,6 +85,8 @@ import OtpPage from "./pages/login/index";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./components/ProtectedRoute";
 import endPoint from "@/routers/router";
+import Notifications from "./pages/dashboard/notifications";
+
 
 const App = () => {
   useEffect(() => {
@@ -111,6 +113,7 @@ const App = () => {
               <Route path={endPoint.XINNGHI} element={<LeaveRequest />} />
               <Route path={endPoint.XINDITRE} element={<LateRequest />} />
               <Route path={endPoint.TANGCA} element={<OvertimeRequest />} />
+              <Route path={endPoint.THONGBAO} element={<Notifications />} />
             </Route>
           </Route>
         </Routes>

@@ -6,6 +6,7 @@ const endPoint = {
   XINNGHI: "/xin-nghi",
   XINDITRE: "/xin-di-tre",
   TANGCA: "/tang-ca",
+  THONGBAO: "/thong-bao",
 };
 
 export default endPoint;

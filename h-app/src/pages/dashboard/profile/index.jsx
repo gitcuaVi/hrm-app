@@ -16,7 +16,7 @@ const Profile = () => {
     if (userId) {
       const storedUser = localStorage.getItem(`user_${userId}`);
       if (storedUser) {
-        setUser(JSON.parse(storedUser)); // Lấy từ localStorage nếu có
+        setUser(JSON.parse(storedUser));
       } else {
         fetch(`http://localhost:3000/users/${userId}`)
         .then((res) => {
@@ -27,7 +27,7 @@ const Profile = () => {
         })
         .then((data) => {
           if (data.length > 0) {
-            setUser(data[0]); // Lấy phần tử đầu tiên
+            setUser(data[0]);
             localStorage.setItem(`user_${userId}`, JSON.stringify(data[0]));
           } else {
             console.error("❌ Không tìm thấy người dùng");

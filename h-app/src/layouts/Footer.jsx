@@ -16,7 +16,9 @@ const Footer = () => {
         style={{ color: isDashboard ? "#2563eb" : "black" }} 
         onClick={() => navigate("/dashboard")} 
       />
-      <GoBell className="icon" />
+      <GoBell className="icon"
+       onClick={() => navigate("/thong-bao")}
+      />
     </div>
   );
 };
