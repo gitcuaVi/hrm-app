@@ -20,14 +20,23 @@ const PORT = process.env.PORT || 3000;
 // Hàm lưu thông tin người dùng vào API backend
 const saveUserToBackend = async (user) => {
   try {
-    const response = await fetch(`${API_BASE_URL}`, {
+    const API_BASE_URL = process.env.API_BASE_URL;
+    if (!API_BASE_URL) {
+      console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
+      return;
+    }
+
+    const url = `${API_BASE_URL}${user.id}/`;
+    console.log(`📡 Gửi dữ liệu đến API: ${url}`);
+
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user),
     });
 
     if (response.ok) {
-      console.log(`✅ Đã lưu user ${user.id} vào backend`);
+      console.log(`✅ Đã lưu user ${user.id} vào API backend`);
     } else {
       console.error("❌ Lỗi khi lưu user:", await response.text());
     }
@@ -35,6 +44,7 @@ const saveUserToBackend = async (user) => {
     console.error("❌ Lỗi kết nối đến API backend:", error);
   }
 };
+
 
 // Xử lý tin nhắn từ Telegram
 bot.on("message", (msg) => {
