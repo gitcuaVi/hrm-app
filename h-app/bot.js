@@ -7,7 +7,10 @@ import http from "http";
 
 dotenv.config();
 
+// Khởi tạo bot Telegram
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+
+// Khởi tạo server Express và WebSocket
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
@@ -19,19 +22,21 @@ const latestMessages = {}; // Lưu tin nhắn bot gửi
 
 // Hàm gửi tin nhắn & phát sự kiện WebSocket
 const sendBotMessage = (userId, text) => {
-  latestMessages[userId] = text;
+  latestMessages[userId] = text; // Lưu tin nhắn mới nhất cho user
   io.emit(`message:${userId}`, text); // Gửi sự kiện WebSocket
   bot.sendMessage(userId, text);
 };
 
+// Xử lý lệnh `/start`
 bot.onText(/\/start/, (msg) => {
   const { id } = msg.from;
-  const text = "👋 Chào mừng bạn! Đây là tin nhắn từ bot.";
 
-  console.log(`📩 Gửi tin nhắn đến user ${id}:`, text);
-  sendBotMessage(id, text);
-});
-  bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+  const welcomeMessage = "👋 Chào mừng bạn! Đây là tin nhắn từ bot.";
+  console.log(`📩 Gửi tin nhắn đến user ${id}:`, welcomeMessage);
+  sendBotMessage(id, welcomeMessage);
+
+  // Gửi thêm nút mở Mini App
+  bot.sendMessage(id, "👋 Nhấn vào nút bên dưới để mở ứng dụng:", {
     reply_markup: {
       inline_keyboard: [
         [
@@ -43,6 +48,7 @@ bot.onText(/\/start/, (msg) => {
       ],
     },
   });
+});
 
 // API lấy tin nhắn bot gần nhất
 app.get("/latest-message/:userId", (req, res) => {
@@ -58,7 +64,7 @@ io.on("connection", (socket) => {
 // Khởi động server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`🚀 Server chạy tại http://localhost:${PORT}`);
+  console.log(`🚀 Server đang chạy tại http://localhost:${PORT}`);
 });
 
 
