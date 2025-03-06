@@ -1,70 +1,70 @@
-import TelegramBot from "node-telegram-bot-api";
-import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import fetch from "node-fetch";
+// import TelegramBot from "node-telegram-bot-api";
+// import dotenv from "dotenv";
+// import express from "express";
+// import cors from "cors";
+// import fetch from "node-fetch";
 
-dotenv.config();
+// dotenv.config();
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
-const app = express();
+// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+// const app = express();
 
-app.use(cors());
-app.use(express.json());
+// app.use(cors());
+// app.use(express.json());
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-let latestMessage = "Chưa có tin nhắn mới"; // Biến lưu trữ tin nhắn mới nhất
+// const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+// let latestMessage = "Chưa có tin nhắn mới"; // Biến lưu trữ tin nhắn mới nhất
 
-const saveUserToBackend = async (user) => {
-  try {
-    if (!API_BASE_URL) {
-      console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
-      return;
-    }
+// const saveUserToBackend = async (user) => {
+//   try {
+//     if (!API_BASE_URL) {
+//       console.error("❌ Lỗi: API_BASE_URL không được thiết lập.");
+//       return;
+//     }
 
-    const url = `${API_BASE_URL}${user.id}/`;
-    console.log(`📡 Gửi dữ liệu đến API: ${url}`);
+//     const url = `${API_BASE_URL}${user.id}/`;
+//     console.log(`📡 Gửi dữ liệu đến API: ${url}`);
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    });
+//     const response = await fetch(url, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(user),
+//     });
 
-    if (response.ok) {
-      console.log(`✅ Đã lưu user ${user.id} vào API backend`);
-    } else {
-      console.error("❌ Lỗi khi lưu user:", await response.text());
-    }
-  } catch (error) {
-    console.error("❌ Lỗi kết nối đến API backend:", error);
-  }
-};
+//     if (response.ok) {
+//       console.log(`✅ Đã lưu user ${user.id} vào API backend`);
+//     } else {
+//       console.error("❌ Lỗi khi lưu user:", await response.text());
+//     }
+//   } catch (error) {
+//     console.error("❌ Lỗi kết nối đến API backend:", error);
+//   }
+// };
 
-// Xử lý tin nhắn từ người dùng
-bot.on("message", (msg) => {
-  const { id, first_name, last_name, username } = msg.from;
-  const text = msg.text || "Không có nội dung";
+// // Xử lý tin nhắn từ người dùng
+// bot.on("message", (msg) => {
+//   const { id, first_name, last_name, username } = msg.from;
+//   const text = msg.text || "Không có nội dung";
 
-  latestMessage = text; // Cập nhật tin nhắn mới nhất
+//   latestMessage = text; // Cập nhật tin nhắn mới nhất
 
-  const user = {
-    id: String(id),
-    name: `${first_name} ${last_name || ""}`.trim(),
-    username: username || "Không có username",
-  };
+//   const user = {
+//     id: String(id),
+//     name: `${first_name} ${last_name || ""}`.trim(),
+//     username: username || "Không có username",
+//   };
 
-  console.log("📩 Người dùng gửi tin nhắn:", user, "📨 Nội dung:", text);
-  saveUserToBackend(user);
-});
+//   console.log("📩 Người dùng gửi tin nhắn:", user, "📨 Nội dung:", text);
+//   saveUserToBackend(user);
+// });
 
-// API để lấy tin nhắn mới nhất
-app.get("/latest-message", (req, res) => {
-  res.json({ message: latestMessage });
-});
+// // API để lấy tin nhắn mới nhất
+// app.get("/latest-message", (req, res) => {
+//   res.json({ message: latestMessage });
+// });
 
-// Khởi động server
-app.listen(3000, () => console.log("🚀 Server đang chạy trên cổng 3000"));
+// // Khởi động server
+// app.listen(3000, () => console.log("🚀 Server đang chạy trên cổng 3000"));
 
 
 
