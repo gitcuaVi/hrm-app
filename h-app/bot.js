@@ -31,6 +31,18 @@ bot.onText(/\/start/, (msg) => {
   console.log(`📩 Gửi tin nhắn đến user ${id}:`, text);
   sendBotMessage(id, text);
 });
+  bot.sendMessage(id, "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở ứng dụng:", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "🚀 Mở Mini App",
+            web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
+          },
+        ],
+      ],
+    },
+  });
 
 // API lấy tin nhắn bot gần nhất
 app.get("/latest-message/:userId", (req, res) => {
