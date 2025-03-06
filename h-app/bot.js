@@ -13,7 +13,7 @@ app.use(express.json());
 
 const messages = {}; // Lưu tin nhắn theo user ID
 
-// Gửi tin nhắn đến Telegram & lưu tin nhắn
+// 📌 Hàm gửi tin nhắn & lưu lại
 const sendMessageToUser = async (chatId, message) => {
   try {
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
@@ -41,7 +41,7 @@ const sendMessageToUser = async (chatId, message) => {
   }
 };
 
-// Nhận tin nhắn từ người dùng
+// 📩 Nhận tin nhắn từ người dùng
 bot.on("message", (msg) => {
   const { id, first_name, last_name, username } = msg.from;
   const text = msg.text || "";
@@ -58,13 +58,13 @@ bot.on("message", (msg) => {
   console.log("📩 Người dùng gửi tin nhắn:", userMessage);
 });
 
-// API lấy tin nhắn theo user ID
+// 📌 API lấy tin nhắn của user
 app.get("/messages/:id", (req, res) => {
   const userId = req.params.id;
   res.json(messages[userId] || []);
 });
 
-// API gửi tin nhắn từ backend đến Telegram
+// 📌 API gửi tin nhắn từ backend đến Telegram
 app.post("/send", async (req, res) => {
   const { id, message } = req.body;
   if (!id || !message) return res.status(400).json({ error: "Thiếu dữ liệu" });
@@ -73,8 +73,38 @@ app.post("/send", async (req, res) => {
   res.json({ success: true });
 });
 
+// ✅ Xử lý /start & Gửi nút mở Mini App
+bot.onText(/\/start/, (msg) => {
+  const { id, first_name, last_name, username } = msg.from;
+  const user = {
+    id: String(id),
+    name: `${first_name} ${last_name || ""}`.trim(),
+    username: username || "Không có username",
+  };
+
+  console.log("📩 Người dùng nhập /start:", user);
+
+  bot.sendMessage(
+    id,
+    "👋 Chào mừng bạn! Nhấn vào nút bên dưới để mở Mini App:",
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "🚀 Mở Mini App",
+              web_app: { url: "https://hrm-app-fawn.vercel.app/" }, 
+            },
+          ],
+        ],
+      },
+    }
+  );
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server chạy tại cổng ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server đang chạy tại cổng ${PORT}`));
+
 
 
 
