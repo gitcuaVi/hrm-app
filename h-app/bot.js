@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_BASE_URL = process.env.API_BASE_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 // Hàm lưu user vào backend
 const saveUserToBackend = async (user) => {
