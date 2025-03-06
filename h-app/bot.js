@@ -15,7 +15,6 @@ app.use(cors());
 app.use(express.json());
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const PORT = process.env.PORT || 3000;
 
 const saveUserToBackend = async (user) => {
   try {
@@ -84,7 +83,7 @@ bot.onText(/\/start/, (msg) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Bot đang chạy trên cổng ${PORT}`);
+  console.log(`🚀 Bot đang chạy`);
 });
 
 
