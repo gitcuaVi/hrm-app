@@ -65,47 +65,45 @@ const Profile = () => {
   useEffect(() => {
     const tg = TelegramWebApp;
     tg.ready();
-
+  
     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const { id, first_name, last_name, username } = tg.initDataUnsafe.user;
       const fullName = `${first_name} ${last_name || ""}`.trim();
-
       setUser({ id, name: fullName, username: username || "Không có username" });
-
-      // Gọi API để lấy thông tin user từ backend
-      fetch(`${API_BASE_URL}/messages`)
+  
+      // Gọi API lấy tin nhắn của đúng user này
+      fetch(`${API_BASE_URL}/messages/${id}`)
         .then((res) => res.json())
         .then((data) => setMessages(data))
         .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
     }
-
+  
     // Cập nhật tin nhắn mỗi 3 giây
     const interval = setInterval(() => {
-      fetch(`${API_BASE_URL}/messages`)
+      fetch(`${API_BASE_URL}/messages/${id}`)
         .then((res) => res.json())
         .then((data) => setMessages(data))
         .catch((error) => console.error("❌ Lỗi khi lấy tin nhắn:", error));
     }, 3000);
-
+  
     return () => clearInterval(interval);
   }, []);
+  
 
   return (
     <div className="profile">
-      <h2>📩 Tin nhắn từ Telegram</h2>
-      <div className="user-info">
-        <strong>🆔 ID:</strong> {user.id} <br />
-        <strong>👤 Tên:</strong> {user.name} <br />
-        <strong>📛 Username:</strong> {user.username} <br />
-      </div>
       <h3>💬 Tin nhắn:</h3>
       <ul className="messages">
-        {messages.map((msg, index) => (
-          <li key={index}>
-            <strong>{msg.name}</strong>: {msg.text} <br />
-            <small>{new Date(msg.timestamp).toLocaleString()}</small>
-          </li>
-        ))}
+        {messages.length > 0 ? (
+          messages.map((msg, index) => (
+            <li key={index}>
+              <strong>{msg.name}</strong>: {msg.text} <br />
+              <small>{new Date(msg.timestamp).toLocaleString()}</small>
+            </li>
+          ))
+        ) : (
+          <p>📭 Chưa có tin nhắn nào</p>
+        )}
       </ul>
     </div>
   );

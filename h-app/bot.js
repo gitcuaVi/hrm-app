@@ -86,9 +86,12 @@ bot.onText(/\/start/, (msg) => {
 });
 
 // API lấy danh sách tin nhắn cho frontend
-app.get("/messages", (req, res) => {
-  res.json(messages);
+app.get("/messages/:userId", (req, res) => {
+  const userId = req.params.userId;
+  const userMessages = messages.filter(msg => msg.id === userId); // Lọc tin nhắn theo ID người dùng
+  res.json(userMessages);
 });
+
 
 // Khởi động server
 app.listen(PORT, () => {
