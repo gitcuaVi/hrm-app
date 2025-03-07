@@ -1,10 +1,9 @@
 
 
-
 import { useState } from "react";
 import { Spin, Typography } from "antd";
 import LeaveRequestForm from "./components/LeaveRequestForm";
-import useLeaveRequest from "@/store/slice/leaveRequestSlice"; 
+import useLeaveRequest from "@/store/slice/leaveRequestSlice";
 
 const { Text } = Typography;
 
