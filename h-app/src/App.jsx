@@ -91,7 +91,7 @@ import Notifications from "./pages/dashboard/notifications";
 const App = () => {
   useEffect(() => {
     window.addEventListener("load", () => {
-      sessionStorage.removeItem("isVerified"); // Xóa xác thực khi tải lại trang
+      sessionStorage.removeItem("isVerified"); 
     });
   }, []);
 

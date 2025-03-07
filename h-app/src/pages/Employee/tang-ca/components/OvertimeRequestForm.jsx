@@ -44,8 +44,12 @@ const OvertimeRequestForm = ({ onSubmit, loading }) => {
         </Form.Item>
         
         {/* Nút gửi */}
-        <Button type="primary" className="submit-btn" htmlType="submit" loading={loading}>
-          Gửi yêu cầu
+        <Button
+          type="primary"
+          className="submit-btn" 
+          htmlType="submit" 
+          loading={loading}>
+            Gửi yêu cầu
         </Button>
       </Form>
     </Card>

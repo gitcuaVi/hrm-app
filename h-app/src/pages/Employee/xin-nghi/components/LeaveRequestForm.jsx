@@ -15,7 +15,10 @@ const LeaveRequestForm = ({ onSubmit, loading }) => {
     <Card className="leave-request-card">
       <Form form={form} layout="vertical" onFinish={onSubmit}>
 
-        <Form.Item label="Loại nghỉ" name="leaveType" initialValue= "Nghỉ nửa ngày">
+        <Form.Item 
+        label="Loại nghỉ" 
+        name="leaveType" 
+        initialValue= "Nghỉ nửa ngày">
           <Select value={leaveType} onChange={setLeaveType}>
             <Option value="half-day">Nghỉ nửa ngày</Option>
             <Option value="full-day">Nghỉ một ngày</Option>
@@ -24,7 +27,10 @@ const LeaveRequestForm = ({ onSubmit, loading }) => {
         </Form.Item>
 
         {leaveType === "half-day" && (
-          <Form.Item label="Chọn buổi" name="session" initialValue="Buổi sáng">
+          <Form.Item 
+          label="Chọn buổi" 
+          name="session" 
+          initialValue="Buổi sáng">
             <Select>
               <Option value="morning">Buổi sáng</Option>
               <Option value="afternoon">Buổi chiều</Option>
@@ -32,21 +38,41 @@ const LeaveRequestForm = ({ onSubmit, loading }) => {
           </Form.Item>
         )}
 
-        <Form.Item label="Ngày bắt đầu" name="startDate" >
-          <DatePicker className="full-width" format="DD/MM/YYYY" placeholder="DD/MM/YYYY" />
+        <Form.Item 
+        label="Ngày bắt đầu" 
+        name="startDate" >
+          <DatePicker 
+          className="full-width" 
+          format="DD/MM/YYYY" 
+          placeholder="DD/MM/YYYY" 
+          />
         </Form.Item>
 
         {leaveType === "multiple-days" && (
-          <Form.Item label="Ngày kết thúc" name="endDate" >
-            <DatePicker className="full-width" format="DD/MM/YYYY" placeholder="DD/MM/YYYY" />
+          <Form.Item 
+          label="Ngày kết thúc"
+           name="endDate" >
+            <DatePicker 
+            className="full-width" 
+            format="DD/MM/YYYY" 
+            placeholder="DD/MM/YYYY" 
+            />
           </Form.Item>
         )}
 
-        <Form.Item label="Lý do" name="reason" >
-          <Input.TextArea rows={3} placeholder="Nhập lý do" />
+        <Form.Item 
+        label="Lý do" 
+        name="reason" >
+          <Input.TextArea 
+          rows={3} 
+          placeholder="Nhập lý do" 
+          />
         </Form.Item>
 
-        <Button type="primary" block htmlType="submit" loading={loading}>
+        <Button 
+        type="primary" 
+        block htmlType="submit" 
+        loading={loading}>
           Gửi yêu cầu
         </Button>
       </Form>
